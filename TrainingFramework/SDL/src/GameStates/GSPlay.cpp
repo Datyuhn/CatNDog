@@ -10,16 +10,15 @@ GSPlay::GSPlay()
 {
 }
 
-
 GSPlay::~GSPlay()
 {
 }
 
-
 void GSPlay::Init()
 {
 	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_play1.tga");
+//	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_play1.tga");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bgr_04_p1.jpg");
 
 	// background
 	
@@ -38,11 +37,11 @@ void GSPlay::Init()
 	m_listButton.push_back(button);
 
    // Animation 
-	texture = ResourceManagers::GetInstance()->GetTexture("Actor1_2.tga");
-	obj = std::make_shared<SpriteAnimation>( texture, 2, 9, 6, 0.2f);
+	texture = ResourceManagers::GetInstance()->GetTexture("image1.png");
+	obj = std::make_shared<SpriteAnimation>( texture, 1, 10, 1, 0.08f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
-	obj->SetSize(40, 50);
-	obj->Set2DPosition(240, 400);
+	obj->SetSize(120, 150);
+	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT/2+40);
 	
 	//Camera::GetInstance()->SetTarget(obj);
 	m_listAnimation.push_back(obj);
@@ -86,9 +85,11 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 			break;
 		case SDLK_LEFT:
 			m_KeyPress |= 1;
+			obj->MoveLeft(1);
 			break;
 		case SDLK_RIGHT:
 			m_KeyPress |= 1 << 2;
+			obj->MoveRight(1);
 			break;
 		default:
 			break;
@@ -152,7 +153,7 @@ void GSPlay::Update(float deltaTime)
 		if (m_KeyPress == 1)
 		{
 			
-			//it->MoveLeft(deltaTime);
+			//it->MoveLeft(15*deltaTime);
 		}
 		it->Update(deltaTime);
 	}

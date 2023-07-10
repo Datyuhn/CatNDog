@@ -11,7 +11,7 @@ protected:
 	int			m_currentFrame;
 	float		m_frameTime;
 	float		m_currentTime;
-	int			m_spriteRow; //start 0,1,2
+	int			m_spriteColumn; //start 0,1,2
 	int		m_frameCount; // start from 1,2,3...
 	float  m_currentTicks;
 	Uint32 m_lastUpdate;
@@ -20,7 +20,7 @@ protected:
 	//SDL_RendererFlip m_flip;
 	//std::shared_ptr<TextureManager> m_texture;
 public:
-	SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float  frameTime);
+	SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteColumn, int frameCount, int numAction, float  frameTime);
 	~SpriteAnimation();
 
 	void		Init() override;
@@ -36,4 +36,7 @@ public:
 	int GetWidth();
 	int GetHeight();
 	void MoveLeft(float deltaTime);
+	void MoveRight(float deltaTime);
+	//void Jump(float deltaTime);
+	//void Crouch(float deltaTime);
 };
