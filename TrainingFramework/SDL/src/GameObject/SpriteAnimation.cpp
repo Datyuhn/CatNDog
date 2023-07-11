@@ -1,5 +1,8 @@
 #include "SpriteAnimation.h"
 #include "TextureManager.h"
+
+static bool reverseAnimation=1;
+
 SpriteAnimation::SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteColumn, int frameCount, int numAction, float frameTime) : BaseObject(texture)
 {
 	m_spriteColumn = spriteColumn;
@@ -35,13 +38,28 @@ void SpriteAnimation::Update(float deltatime)
 {
 	m_currentTicks += deltatime;
 		if(m_currentTicks  >= m_frameTime) {
-		m_currentFrame++;
+			if (reverseAnimation == 1) m_currentFrame++;
+			else m_currentFrame--;
 		if (m_currentFrame >= m_frameCount) {
-			m_currentFrame = 0;
+			//m_currentFrame = 0;
+			reverseAnimation = 0;
 		}
+		if (m_currentFrame <= 0) reverseAnimation = 1;
 		m_currentTicks -= m_frameTime;
 	}
 }
+
+//void SpriteAnimation::Update(float deltatime)
+//{
+//	m_currentTicks += deltatime;
+//	if (m_currentTicks >= m_frameTime) {
+//		m_currentFrame++;
+//		if (m_currentFrame >= m_frameCount) {
+//			m_currentFrame = 0;
+//		}
+//		m_currentTicks -= m_frameTime;
+//	}
+//}
 
 void SpriteAnimation::Set2DPosition(float x, float y)
 {
