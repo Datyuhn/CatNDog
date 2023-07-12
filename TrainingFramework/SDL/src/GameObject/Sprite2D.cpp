@@ -1,9 +1,5 @@
 #include "Sprite2D.h"
 #include "TextureManager.h"
-//Sprite2D::Sprite2D()
-//{
-//	Init();
-//}
 
 Sprite2D::Sprite2D(std::shared_ptr<TextureManager> texture, SDL_RendererFlip flip)
 	:BaseObject(texture), m_iWidth(100), m_iHeight(50)

@@ -38,10 +38,10 @@ void GSPlay::Init()
 
    // Animation 
 	texture = ResourceManagers::GetInstance()->GetTexture("image1.png");
-	obj = std::make_shared<SpriteAnimation>( texture, 1, 10, 1, 0.08f);
+	obj = std::make_shared<SpriteAnimation>( texture, 1, 9, 1, 0.15f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
-	obj->SetSize(120, 150);
-	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT/2+40);
+	obj->SetSize(106, 120);
+	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT/2+100);
 	
 	//Camera::GetInstance()->SetTarget(obj);
 	m_listAnimation.push_back(obj);

@@ -21,10 +21,8 @@ bool Game::Init()
 
 void Game::Run()
 {
-
 			//Main loop flag
 			bool quit = false;
-
 			//Event handler
 			SDL_Event e;
 			//Current animation frame
@@ -39,10 +37,12 @@ void Game::Run()
 			TextureManager* currentTexure= NULL;
 			//Uint32 startTime = 0;
 			std::string textTime;
+
 			//Start counting frames per second
 			Uint32 start = SDL_GetTicks();
 			//int countedFrames = 0;
-		//	fpsTimer->Start();
+			//fpsTimer->Start();
+			// 
 			//While application is runningkaka
 			capTimer = std::make_shared<Timer>();
 			Uint32 startTime = SDL_GetTicks();
@@ -54,7 +54,6 @@ void Game::Run()
 				//Handle events on queue
 				while (SDL_PollEvent(&e) != 0)
 				{
-
 					//User requests quit
 					if (e.type == SDL_QUIT)
 					{

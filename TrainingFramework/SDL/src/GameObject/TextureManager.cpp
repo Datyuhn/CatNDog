@@ -90,25 +90,33 @@ void TextureManager::Render(int x, int y, int width, int height, double angle, S
 	SDL_Rect dstRect = { x - Camera::GetInstance()->GetPosition().x, y - Camera::GetInstance()->GetPosition().y, width, height };
 	SDL_RenderCopyEx(Renderer::GetInstance()->GetRenderer(), m_Texture, NULL, &dstRect, angle, nullptr, flip);
 }
+
+/*
 // RenderFrame horrizontal
-// void TextureManager::RenderFrame(int x, int y, int width, int height, int row, int currentframe, int framecount, int numAction, double angle, SDL_RendererFlip flip)
-// {
-//	float srcWidth = originWidth/ framecount;
-//	float srcHeight = originHeight/numAction;
-//	SDL_Rect srcRect = { srcWidth * currentframe, srcHeight * (row - 1), srcWidth, srcHeight }; //pointer to source rect(the area and position where you get the sprite on the texture).
-//	SDL_Rect dstRect = { x - Camera::GetInstance()->GetPosition().x, y - Camera::GetInstance()->GetPosition().y, width , height }; // pointer to dest rect(the area and position on the renderer you are going to draw).
-//	SDL_RenderCopyEx(Renderer::GetInstance()->GetRenderer(), m_Texture, &srcRect, &dstRect, angle, nullptr, flip);
-// }
+void TextureManager::RenderFrame(int x, int y, int width, int height, int row, int currentframe, int framecount, int numAction, double angle, SDL_RendererFlip flip)
+{
+	float srcWidth = originWidth/ framecount;
+	float srcHeight = originHeight/numAction;
+	SDL_Rect srcRect = { srcWidth * currentframe, srcHeight * (row - 1), srcWidth, srcHeight }; //pointer to source rect(the area and position where you get the sprite on the texture).
+	SDL_Rect dstRect = { x - Camera::GetInstance()->GetPosition().x, y - Camera::GetInstance()->GetPosition().y, width , height }; // pointer to dest rect(the area and position on the renderer you are going to draw).
+	SDL_RenderCopyEx(Renderer::GetInstance()->GetRenderer(), m_Texture, &srcRect, &dstRect, angle, nullptr, flip);
+}
+*/
 
 //RenderFrame vertical
 void TextureManager::RenderFrame(int x, int y, int width, int height, int column, int currentframe, int framecount, int numAction, double angle, SDL_RendererFlip flip)
 {
 	float srcWidth = originWidth/numAction;
 	float srcHeight = originHeight/framecount;
-	SDL_Rect srcRect = { srcWidth * (column - 1), srcHeight * currentframe, srcWidth, srcHeight }; //pointer to source rect(the area and position where you get the sprite on the texture).
-	SDL_Rect dstRect = { x - Camera::GetInstance()->GetPosition().x, y - Camera::GetInstance()->GetPosition().y, width , height }; // pointer to dest rect(the area and position on the renderer you are going to draw).
+
+	//pointer to source rect (the area and position where you get the sprite on the texture).
+	SDL_Rect srcRect = { srcWidth * (column - 1), srcHeight * currentframe, srcWidth, srcHeight };
+
+	// pointer to dest rect(the area and position on the renderer you are going to draw).
+	SDL_Rect dstRect = { x - Camera::GetInstance()->GetPosition().x, y - Camera::GetInstance()->GetPosition().y, width , height };
 	SDL_RenderCopyEx(Renderer::GetInstance()->GetRenderer(), m_Texture, &srcRect, &dstRect, angle, nullptr, flip);
 }
+
 
 void TextureManager::SetBlendMode(SDL_BlendMode blending)
 {
