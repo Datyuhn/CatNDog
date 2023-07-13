@@ -6,22 +6,16 @@
 #include "GameObject/Camera.h"
 
 
-GSPlay::GSPlay()
-{
-}
-
-GSPlay::~GSPlay()
-{
-}
+GSPlay::GSPlay() {}
+GSPlay::~GSPlay() {}
 
 void GSPlay::Init()
 {
-	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-//	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_play1.tga");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bgr_04_p1.jpg");
+	// auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
+	// auto texture = ResourceManagers::GetInstance()->GetTexture("bg_play1.tga");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bgr_09_p1.jpg");
 
 	// background
-	
 	m_background = std::make_shared<Sprite2D>( texture, SDL_FLIP_NONE);
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
 	m_background->Set2DPosition(0, 0);
@@ -36,16 +30,15 @@ void GSPlay::Init()
 		});
 	m_listButton.push_back(button);
 
-   // Animation 
-	texture = ResourceManagers::GetInstance()->GetTexture("image1.png");
-	obj = std::make_shared<SpriteAnimation>( texture, 1, 9, 1, 0.15f);
+   // Animation
+	texture = ResourceManagers::GetInstance()->GetTexture("image2.png");
+	obj = std::make_shared<SpriteAnimation>( texture, 1, 10, 1, 0.09f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
 	obj->SetSize(106, 120);
-	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT/2+100);
+	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT/2 + 120);
 	
 	//Camera::GetInstance()->SetTarget(obj);
 	m_listAnimation.push_back(obj);
-
 	m_KeyPress = 0;
 }
 
@@ -54,19 +47,19 @@ void GSPlay::Exit()
 	
 }
 
-
 void GSPlay::Pause()
 {
 
 }
+
 void GSPlay::Resume()
 {
 	
 }
 
-
 void GSPlay::HandleEvents()
 {
+
 }
 
 void GSPlay::HandleKeyEvents(SDL_Event& e)
@@ -85,11 +78,9 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 			break;
 		case SDLK_LEFT:
 			m_KeyPress |= 1;
-			obj->MoveLeft(1);
 			break;
 		case SDLK_RIGHT:
 			m_KeyPress |= 1 << 2;
-			obj->MoveRight(1);
 			break;
 		default:
 			break;
@@ -138,26 +129,31 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 
 void GSPlay::Update(float deltaTime)
 {
-	switch (m_KeyPress)//Handle Key event
-	{
-	default:
-		break;
+	if (m_KeyPress & 1){
+		MoveDirection.x = -1;
 	}
-	
+	else if (m_KeyPress & 4) {
+		MoveDirection.x = 1;
+	}
+	else {
+		MoveDirection.x = 0;
+	}
+
+	Vector2 currentPosition = obj->Get2DPosition();
+	obj->Set2DPosition(currentPosition.x + MoveDirection.x * deltaTime * m_Velocity, SCREEN_HEIDHT / 2 + 120);
+
 	for (auto it : m_listButton)
 	{
 		it->Update(deltaTime);
 	}
 	for (auto it : m_listAnimation)
 	{
-		if (m_KeyPress == 1)
-		{
-			
+		/* if (m_KeyPress == 1)
+		{			
 			//it->MoveLeft(15*deltaTime);
-		}
+		}*/
 		it->Update(deltaTime);
 	}
-
 	//Update position of camera
 	//Camera::GetInstance()->Update(deltaTime);
 	//obj->Update(deltaTime);
@@ -171,7 +167,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	{
 		it->Draw(renderer);
 	}
-//	obj->Draw(renderer);
+	//obj->Draw(renderer);
 	for (auto it : m_listAnimation)
 	{
 		it->Draw(renderer);

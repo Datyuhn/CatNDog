@@ -4,8 +4,7 @@
 class Sprite2D;
 class SpriteAnimation;
 
-class GSPlay :
-	public GameStateBase
+class GSPlay :	public GameStateBase
 {
 public:
 	GSPlay();
@@ -13,7 +12,6 @@ public:
 
 	void	Init() override;
 	void	Exit() override;
-
 	void	Pause() override;
 	void	Resume() override;
 
@@ -32,7 +30,8 @@ private:
 	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
 	std::shared_ptr<SpriteAnimation> obj;
 	std::shared_ptr<MouseButton> button;
+	Vector2 MoveDirection;
 	float time = 0.0f;
-	float m_Velocity = 10.0f;
+	float m_Velocity = 100.0f;
 };
 

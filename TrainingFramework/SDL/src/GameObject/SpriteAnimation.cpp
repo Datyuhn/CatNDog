@@ -1,7 +1,7 @@
 #include "SpriteAnimation.h"
 #include "TextureManager.h"
 
-static bool reverseAnimation=1;
+// static bool reverseAnimation=1;
 
 SpriteAnimation::SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteColumn, int frameCount, int numAction, float frameTime) : BaseObject(texture)
 {
@@ -101,11 +101,11 @@ int SpriteAnimation::GetHeight()
 
 void SpriteAnimation::MoveLeft(float deltaTime)
 {
-	m_position.x -= 20 * deltaTime;
+	m_position.x -= 30 * deltaTime;
 }
 void SpriteAnimation::MoveRight(float deltaTime)
 {
-	m_position.x += 20 * deltaTime;
+	m_position.x += 30 * deltaTime;
 }
 //void SpriteAnimation::Jump(float deltaTime)
 //{

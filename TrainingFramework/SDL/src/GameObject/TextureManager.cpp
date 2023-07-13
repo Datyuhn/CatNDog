@@ -68,7 +68,6 @@ bool TextureManager::LoadImage(const std::string& path)
 			m_ListTextures.push_back(m_Texture);
 			
 		}
-
 		//Get rid of old loaded surface
 		SDL_FreeSurface(loadedSurface);
 	}
@@ -92,7 +91,7 @@ void TextureManager::Render(int x, int y, int width, int height, double angle, S
 }
 
 /*
-// RenderFrame horrizontal
+// Render frame horrizontal
 void TextureManager::RenderFrame(int x, int y, int width, int height, int row, int currentframe, int framecount, int numAction, double angle, SDL_RendererFlip flip)
 {
 	float srcWidth = originWidth/ framecount;
@@ -103,7 +102,7 @@ void TextureManager::RenderFrame(int x, int y, int width, int height, int row, i
 }
 */
 
-//RenderFrame vertical
+//Render frame vertical
 void TextureManager::RenderFrame(int x, int y, int width, int height, int column, int currentframe, int framecount, int numAction, double angle, SDL_RendererFlip flip)
 {
 	float srcWidth = originWidth/numAction;
@@ -116,7 +115,6 @@ void TextureManager::RenderFrame(int x, int y, int width, int height, int column
 	SDL_Rect dstRect = { x - Camera::GetInstance()->GetPosition().x, y - Camera::GetInstance()->GetPosition().y, width , height };
 	SDL_RenderCopyEx(Renderer::GetInstance()->GetRenderer(), m_Texture, &srcRect, &dstRect, angle, nullptr, flip);
 }
-
 
 void TextureManager::SetBlendMode(SDL_BlendMode blending)
 {

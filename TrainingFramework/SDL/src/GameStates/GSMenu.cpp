@@ -45,13 +45,13 @@ void GSMenu::Init()
 		});
 	m_listButton.push_back(btnPlay);
 
-	// Play
-	///Set Font
-	m_textColor = { 255, 255, 0 };
-	m_textGameName = std::make_shared<Text>("Data/lazy.ttf", m_textColor);
-	m_textGameName->SetSize(300, 50);
-	m_textGameName->Set2DPosition((SCREEN_WIDTH - btnPlay->GetWidth()) / 2, (SCREEN_HEIDHT - btnPlay->GetHeight()) / 2);
-	m_textGameName->LoadFromRenderText("Play");
+	//// Play
+	/////Set Font
+	//m_textColor = { 255, 255, 0 };
+	//m_textGameName = std::make_shared<Text>("Data/lazy.ttf", m_textColor);
+	//m_textGameName->SetSize(300, 50);
+	//m_textGameName->Set2DPosition((SCREEN_WIDTH - btnPlay->GetWidth()) / 2, (SCREEN_HEIDHT - btnPlay->GetHeight()) / 2);
+	//m_textGameName->LoadFromRenderText("Play");
 
 	// exit button
 	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");
@@ -88,13 +88,13 @@ void GSMenu::Init()
 
 	// game title
 	///Set Font
-	m_textColor = { 255, 255, 0 };
-	m_textGameName = std::make_shared<Text>("Data/lazy.ttf", m_textColor);
-	m_textGameName->SetSize(300, 50);
+	m_textColor = { 122, 240, 35 };
+	m_textGameName = std::make_shared<Text>("Data/Rhuma_Sinera_Regular.ttf", m_textColor);
+	m_textGameName->SetSize(300, 90);
 	m_textGameName->Set2DPosition((SCREEN_WIDTH - m_textGameName->GetWidth())/2, SCREEN_HEIDHT / 2 - 200);
 	m_textGameName->LoadFromRenderText("Your Game");
-	m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
-	m_Sound->PlaySound();
+	//m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	//m_Sound->PlaySound();
 }
 
 void GSMenu::Exit()

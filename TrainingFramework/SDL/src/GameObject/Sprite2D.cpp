@@ -26,6 +26,7 @@ void Sprite2D::Draw(SDL_Renderer * renderer)
 
 void Sprite2D::Update(float deltatime)
 {
+
 }
 
 void Sprite2D::Set2DPosition(float x, float y)

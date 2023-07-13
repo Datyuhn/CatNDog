@@ -42,7 +42,7 @@ void Game::Run()
 			Uint32 start = SDL_GetTicks();
 			//int countedFrames = 0;
 			//fpsTimer->Start();
-			// 
+			
 			//While application is runningkaka
 			capTimer = std::make_shared<Timer>();
 			Uint32 startTime = SDL_GetTicks();
@@ -63,13 +63,11 @@ void Game::Run()
 					{
 						GameStateMachine::GetInstance()->CurrentState()->HandleKeyEvents(e);
 					}
-
 					//Handle Touch Event
 					if (GameStateMachine::GetInstance()->HasState())
 					{
 						GameStateMachine::GetInstance()->CurrentState()->HandleTouchEvents(e, true);
 					}
-
 				}
 				//Clear screen
 				SDL_SetRenderDrawColor(Renderer::GetInstance()->GetRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
@@ -116,7 +114,6 @@ void Game::Update(float deltaTime)
 		GameStateMachine::GetInstance()->CurrentState()->Draw(Renderer::GetInstance()->GetRenderer());
 	}
 }
-
 
 Game::~Game()
 {
