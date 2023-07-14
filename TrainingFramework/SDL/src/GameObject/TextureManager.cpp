@@ -140,7 +140,7 @@ bool TextureManager::LoadFromRendererText(TTF_Font* font, std::string& textureTe
 	}
 	else
 	{
-		//Create texture formm surface pixels
+		//Create texture form surface pixels
 		m_Texture = SDL_CreateTextureFromSurface(Renderer::GetInstance()->GetRenderer(), textSurface);
 		if (m_Texture == NULL)
 		{

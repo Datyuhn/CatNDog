@@ -3,13 +3,13 @@
 #include "Game.h"
 #include "GameStateBase.h"
 #include "GameStateMachine.h"
-//Screen dimension constants
 #include"SDL_mixer.h"
+
+//Screen dimension constants
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 Game::Game()
 {
-	//Init create window for rendering
 	Init();
 }
 bool Game::Init()

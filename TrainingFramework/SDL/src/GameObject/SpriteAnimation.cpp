@@ -18,12 +18,10 @@ SpriteAnimation::SpriteAnimation(std::shared_ptr<TextureManager> texture, int sp
 }
 SpriteAnimation::~SpriteAnimation()
 {
-
 }
 
 void SpriteAnimation::Init()
 {
-
 }
 
 void SpriteAnimation::Draw(SDL_Renderer* renderer)
@@ -99,19 +97,15 @@ int SpriteAnimation::GetHeight()
 	return m_iHeight;
 }
 
-void SpriteAnimation::MoveLeft(float deltaTime)
-{
-	m_position.x -= 30 * deltaTime;
-}
-void SpriteAnimation::MoveRight(float deltaTime)
-{
-	m_position.x += 30 * deltaTime;
-}
+//void SpriteAnimation::MoveLeft(float deltaTime)
+//{
+//	m_position.x -= 30 * deltaTime;
+//}
+//void SpriteAnimation::MoveRight(float deltaTime)
+//{
+//	m_position.x += 30 * deltaTime;
+//}
 //void SpriteAnimation::Jump(float deltaTime)
-//{
-
-//}
+//{}
 //void SpriteAnimation::Crouch(float deltaTime)
-//{
-
-//}
+//{}
