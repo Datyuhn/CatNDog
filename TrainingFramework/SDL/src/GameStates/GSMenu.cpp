@@ -49,7 +49,7 @@ void GSMenu::Init()
 	btnOption->SetSize(317, 90);
 	btnOption->Set2DPosition((SCREEN_WIDTH - btnPlay->GetWidth()) / 2, (SCREEN_HEIDHT - btnPlay->GetHeight()) / 2 + 160);
 	btnOption->SetOnClick([]() {
-		//GameStateMachine::GetInstance()->ChangeState(StateType::STATE_OPTION);
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_OPTION);
 		});
 	m_listButton.push_back(btnOption);
 

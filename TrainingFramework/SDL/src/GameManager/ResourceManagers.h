@@ -24,10 +24,9 @@ private:
 	std::map<std::string, std::shared_ptr<TextureManager>> m_MapTexture;
 	std::string m_ShaderPath;
 	std::string m_TexturePath;
+	std::string m_FolderPath;
 	std::string m_ModelsPath;
 	std::string m_FontPath;
-
-	//Sound
 	std::string m_SoundPath;
 
 };

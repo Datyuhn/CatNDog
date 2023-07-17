@@ -1,15 +1,15 @@
-#include "GSGuide.h"
+#include "GSOption.h"
 
-GSGuide::GSGuide() : GameStateBase(StateType::STATE_GUIDE),
-guideFrm(nullptr), m_background(nullptr), m_listButton(std::list<std::shared_ptr<MouseButton>>{}), m_textColor(m_textColor), m_Font(m_Font)
+GSOption::GSOption() : GameStateBase(StateType::STATE_OPTION),
+frm(nullptr), m_background(nullptr), m_listButton(std::list<std::shared_ptr<MouseButton>>{}), m_textColor(m_textColor), m_Font(m_Font)
 {
 }
 
-GSGuide::~GSGuide()
+GSOption::~GSOption()
 {
 }
 
-void GSGuide::Init()
+void GSOption::Init()
 {
 	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("startbg.jpg");
@@ -20,11 +20,11 @@ void GSGuide::Init()
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
 	m_background->Set2DPosition(0, 0);
 
-	//guide frame
+	//option frame
 	texture = ResourceManagers::GetInstance()->GetTexture("popupinner-slow.jpg");
-	guideFrm = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
-	guideFrm->SetSize(577, 364);
-	guideFrm->Set2DPosition(SCREEN_WIDTH / 2 - 288.5, SCREEN_HEIDHT / 2 - 182);
+	frm = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	frm->SetSize(577, 364);
+	frm->Set2DPosition(SCREEN_WIDTH / 2 - 288.5, SCREEN_HEIDHT / 2 - 182);
 
 	// exit button
 	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");
@@ -41,28 +41,29 @@ void GSGuide::Init()
 	m_Sound->PlaySound();
 }
 
-void GSGuide::Exit()
+void GSOption::Exit()
 {
+
 }
 
-void GSGuide::Pause()
+void GSOption::Pause()
 {
 	m_Sound->StopSound();
 }
-void GSGuide::Resume()
+void GSOption::Resume()
 {
 	m_Sound->PlaySound();
 }
 
-void GSGuide::HandleEvents()
+void GSOption::HandleEvents()
 {
 }
 
-void GSGuide::HandleKeyEvents(SDL_Event& e)
+void GSOption::HandleKeyEvents(SDL_Event& e)
 {
 }
 
-void GSGuide::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
+void GSOption::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 {
 	for (auto button : m_listButton)
 	{
@@ -73,11 +74,11 @@ void GSGuide::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 	}
 }
 
-void GSGuide::HandleMouseMoveEvents(int x, int y)
+void GSOption::HandleMouseMoveEvents(int x, int y)
 {
 }
 
-void GSGuide::Update(float deltaTime)
+void GSOption::Update(float deltaTime)
 {
 	float time = 0.0f;
 	time += deltaTime;
@@ -92,13 +93,13 @@ void GSGuide::Update(float deltaTime)
 	}
 }
 
-void GSGuide::Draw(SDL_Renderer* renderer)
+void GSOption::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
 	for (auto it : m_listButton)
 	{
 		it->Draw(renderer);
 	}
-	guideFrm->Draw(renderer);
+	frm->Draw(renderer);
 	//m_textGameName->Draw(renderer);
 }

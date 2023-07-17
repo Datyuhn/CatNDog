@@ -11,9 +11,11 @@ public:
 
 	virtual void Init() = 0;
 	virtual void Exit() = 0;
-
 	virtual void Pause() = 0;
 	virtual void Resume() = 0;
+
+	//virtual void PauseGame(SDL_Event& e) = 0;
+	//virtual void ResumeGame(SDL_Event& e) = 0;
 
 	virtual void HandleEvents() = 0;
 	virtual void HandleKeyEvents(SDL_Event& e) = 0;

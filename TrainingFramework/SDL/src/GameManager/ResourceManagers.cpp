@@ -4,7 +4,7 @@ ResourceManagers::ResourceManagers()
 {
 	std::string dataPath = "Data/";
 	m_TexturePath = dataPath + "Textures/";
-	
+	m_FolderPath = m_TexturePath + "Sweet_Foods/shadow";
 }
 
 ResourceManagers::~ResourceManagers()
@@ -24,8 +24,7 @@ void ResourceManagers::AddTexture(const std::string& name)
 }
 
 void ResourceManagers::AddFont(const std::string& name)
-{
-	
+{	
 }
 
 void ResourceManagers::RemoveTexture(const std::string& name)

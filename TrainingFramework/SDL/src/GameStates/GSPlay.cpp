@@ -9,10 +9,11 @@
 GSPlay::GSPlay() {}
 GSPlay::~GSPlay() {}
 
+static bool g_isPaused = false;
+
 void GSPlay::Init()
 {
 	// auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-	// auto texture = ResourceManagers::GetInstance()->GetTexture("bg_play1.tga");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bgr_09_p1.jpg");
 
 	// background
@@ -20,17 +21,73 @@ void GSPlay::Init()
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
 	m_background->Set2DPosition(0, 0);
 
-	// button close
-	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");
-	button = std::make_shared<MouseButton>( texture, SDL_FLIP_NONE);
-	button->SetSize(50, 50);
-	button->Set2DPosition(SCREEN_WIDTH - 50, 10);
-	button->SetOnClick([this]() {
-		GameStateMachine::GetInstance()->PopState();
+	// how to play button
+	/*
+	texture = ResourceManagers::GetInstance()->GetTexture("mBtn_yel.png");
+	std::shared_ptr<MouseButton> btnGuide = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
+
+	btnGuide->SetSize(317, 90);
+	btnGuide->Set2DPosition((SCREEN_WIDTH - btnGuide->GetWidth()) / 2, (SCREEN_HEIDHT - btnGuide->GetHeight()) / 2 + 70);
+	btnGuide->SetOnClick([]() {
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_GUIDE);
+		});
+	m_listButton.push_back(btnGuide);
+	*/
+
+	// main menu button
+	texture = ResourceManagers::GetInstance()->GetTexture("btn_menu.tga");
+	button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
+
+	button->SetSize(80, 80);
+	button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 + 120, (SCREEN_HEIDHT - button->GetHeight()) / 2);
+	button->SetOnClick([]() {
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
 		});
 	m_listButton.push_back(button);
 
-   // Animation
+	// restart button
+	texture = ResourceManagers::GetInstance()->GetTexture("btn_restart.tga");
+	button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
+
+	button->SetSize(80, 80);
+	button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 - 0, (SCREEN_HEIDHT - button->GetHeight()) / 2);
+	button->SetOnClick([]() {
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
+		});
+	m_listButton.push_back(button);
+
+	// button close
+	texture = ResourceManagers::GetInstance()->GetTexture("btn_play.tga");
+	button = std::make_shared<MouseButton>( texture, SDL_FLIP_NONE);
+	button->SetSize(80, 80);
+	button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 - 120, (SCREEN_HEIDHT - button->GetHeight()) / 2);
+	button->SetOnClick([this]() {
+		isPaused = false;
+	});
+	m_listButton.push_back(button);
+
+	// Pause frame
+	auto b_pause = ResourceManagers::GetInstance()->GetTexture("mBtn_yel.png");
+	frm = std::make_shared<Sprite2D>(b_pause, SDL_FLIP_NONE);
+	frm->SetSize(588, 170);
+	frm->Set2DPosition((SCREEN_WIDTH - frm->GetWidth()) / 2, (SCREEN_HEIDHT - frm->GetHeight()) / 2);
+
+	// Button pause
+	texture = ResourceManagers::GetInstance()->GetTexture("btn_pause.tga");
+	btnPause = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
+	btnPause->SetSize(80, 80);
+	btnPause->Set2DPosition(SCREEN_WIDTH - 90, 10);
+	btnPause->SetOnClick([this]() {
+		isPaused = true;
+	});
+	
+	//Foods
+	texture = ResourceManagers::GetInstance()->GetTexture("Items/Piece-of-cake_shadow.png");
+	food = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	food->SetSize(60, 60);
+	food->Set2DPosition(SCREEN_WIDTH / 2 - 260, 0);
+
+    // Animation
 	texture = ResourceManagers::GetInstance()->GetTexture("image2.png");
 	obj = std::make_shared<SpriteAnimation>( texture, 1, 10, 1, 0.09f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
@@ -121,6 +178,7 @@ void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 			break;
 		}
 	}
+	btnPause->HandleTouchEvent(&e);
 }
 
 void GSPlay::HandleMouseMoveEvents(int x, int y)
@@ -129,30 +187,27 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 
 void GSPlay::Update(float deltaTime)
 {
-	if (m_KeyPress & 1){
-		MoveDirection.x = -1;
-	}
-	else if (m_KeyPress & 4) {
-		MoveDirection.x = 1;
+	if (!isPaused) {
+		if (m_KeyPress & 1) {
+			MoveDirection.x = -1;
+		}
+		else if (m_KeyPress & 4) {
+			MoveDirection.x = 1;
+		}
+		else {
+			MoveDirection.x = 0;
+		}
+
+		Vector2 currentPosition = obj->Get2DPosition();
+		obj->Set2DPosition(currentPosition.x + MoveDirection.x * deltaTime * m_Velocity, SCREEN_HEIDHT / 2 + 150);
+
+		for (auto it : m_listAnimation)
+		{
+			it->Update(deltaTime);
+		}
 	}
 	else {
-		MoveDirection.x = 0;
-	}
-
-	Vector2 currentPosition = obj->Get2DPosition();
-	obj->Set2DPosition(currentPosition.x + MoveDirection.x * deltaTime * m_Velocity, SCREEN_HEIDHT / 2 + 120);
-
-	for (auto it : m_listButton)
-	{
-		it->Update(deltaTime);
-	}
-	for (auto it : m_listAnimation)
-	{
-		/* if (m_KeyPress == 1)
-		{			
-			//it->MoveLeft(15*deltaTime);
-		}*/
-		it->Update(deltaTime);
+		//
 	}
 	//Update position of camera
 	//Camera::GetInstance()->Update(deltaTime);
@@ -162,14 +217,22 @@ void GSPlay::Update(float deltaTime)
 void GSPlay::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
-	//m_score->Draw();
-	for (auto it : m_listButton)
-	{
-		it->Draw(renderer);
-	}
-	//obj->Draw(renderer);
+	food->Draw(renderer);
 	for (auto it : m_listAnimation)
 	{
 		it->Draw(renderer);
 	}
+	//m_score->Draw();
+	if (isPaused)
+	{
+		SDL_Rect rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIDHT };
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 150);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_MUL);
+		SDL_RenderFillRect(renderer, &rect);
+		frm->Draw(renderer);
+		for (auto it : m_listButton)
+		{
+			it->Draw(renderer);
+		}
+	} else btnPause->Draw(renderer);
 }
