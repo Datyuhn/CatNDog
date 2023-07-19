@@ -7,7 +7,7 @@ Text::Text(std::string fontPath, SDL_Color textColor)
 
 	if (m_Font == NULL)
 	{
-		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
 		return;
 	}
 	m_pTexture = std::make_shared<TextureManager>();

@@ -21,7 +21,6 @@ void Sprite2D::Draw(SDL_Renderer * renderer)
 	{
 		m_pTexture->Render(m_position.x, m_position.y, m_iWidth, m_iHeight, m_angle, m_flip);
 	}
-	
 }
 
 void Sprite2D::Update(float deltatime)
@@ -34,9 +33,11 @@ void Sprite2D::Set2DPosition(float x, float y)
 	m_position = Vector3((float)x, (float)y, 0.0f);
 }
 
-Vector3 Sprite2D::Get2DPosition()
+Vector2 Sprite2D::Get2DPosition()
 {
-	return Vector3(m_position.x, m_position.y, 0.0f);
+	//return Vector3(m_position.x, m_position.y, 0.0f);
+	return Vector2(m_position.x, m_position.y);
+
 }
 
 void Sprite2D::SetSize(int width, int height)

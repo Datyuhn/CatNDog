@@ -3,9 +3,10 @@
 
 // static bool reverseAnimation=1;
 
-SpriteAnimation::SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteColumn, int frameCount, int numAction, float frameTime) : BaseObject(texture)
+SpriteAnimation::SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float frameTime) 
+	: BaseObject(texture)
 {
-	m_spriteColumn = spriteColumn;
+	m_spriteRow = spriteRow;
 	m_frameCount = frameCount;
 	m_numAction = numAction;
 	//m_animSpeed = animSpeed;
@@ -28,7 +29,7 @@ void SpriteAnimation::Draw(SDL_Renderer* renderer)
 {
 	if (m_pTexture != nullptr)
 	{
-		m_pTexture->RenderFrame(m_position.x, m_position.y, m_iWidth, m_iHeight, m_spriteColumn, m_currentFrame, m_frameCount, m_numAction, m_angle, m_flip);
+		m_pTexture->RenderFrame(m_position.x, m_position.y, m_iWidth, m_iHeight, m_spriteRow, m_currentFrame, m_frameCount, m_numAction, m_angle, m_flip);
 	}
 }
 
@@ -96,16 +97,3 @@ int SpriteAnimation::GetHeight()
 {
 	return m_iHeight;
 }
-
-//void SpriteAnimation::MoveLeft(float deltaTime)
-//{
-//	m_position.x -= 30 * deltaTime;
-//}
-//void SpriteAnimation::MoveRight(float deltaTime)
-//{
-//	m_position.x += 30 * deltaTime;
-//}
-//void SpriteAnimation::Jump(float deltaTime)
-//{}
-//void SpriteAnimation::Crouch(float deltaTime)
-//{}

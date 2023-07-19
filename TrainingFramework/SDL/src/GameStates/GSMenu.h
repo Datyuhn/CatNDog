@@ -1,7 +1,7 @@
 #pragma once
 #include "GameStateBase.h"
 #include "GameObject/MouseButton.h"
-#include"GameObject/Text.h"
+#include "GameObject/Text.h"
 #include "GameObject/Sound.h"
 #include "GameObject/SpriteAnimation.h"
 

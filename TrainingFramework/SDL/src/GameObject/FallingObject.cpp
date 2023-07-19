@@ -18,8 +18,55 @@ void FallingObject::Draw(SDL_Renderer* renderer)
 	{
 		m_pTexture->Render(m_position.x, m_position.y, m_iWidth, m_iHeight, m_angle, m_flip);
 	}
-
 }
 
 void FallingObject::Update(float deltatime) {}
+
+void FallingObject::SetSize(int width, int height)
+{
+	m_iWidth = width;
+	m_iHeight = height;
+	m_scale = Vector3((float)m_iWidth, (float)m_iHeight, 0.0f);
+}
+
+void FallingObject::Spawn(int ramdom_x, int ramdom_y)
+{
+	int randomX = rand() % ramdom_x;
+	int randomY = ramdom_y;
+	this->Set2DPosition(randomX, randomY);
+}
+
+void FallingObject::Set2DPosition(float x, float y)
+{
+	m_position = Vector3((float)x, (float)y, 0.0f);
+}
+
+Vector2 FallingObject::Get2DPosition()
+{
+	return Vector2(m_position.x, m_position.y);
+
+}
+
+void FallingObject::SetRotation(double angle)
+{
+}
+
+void FallingObject::SetFlip(SDL_RendererFlip flip)
+{
+}
+
+void FallingObject::SetVelocityY(float velocity)
+{
+}
+
+
+int FallingObject::GetWidth()
+{
+	return m_iWidth;
+}
+
+int FallingObject::GetHeight()
+{
+	return m_iHeight;
+}
 

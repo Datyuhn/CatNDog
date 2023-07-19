@@ -4,7 +4,8 @@
 #include "GameObject/MouseButton.h"
 #include "GameObject/SpriteAnimation.h"
 #include "GameObject/Camera.h"
-
+#include "GameObject/FallingObject.h"
+#include "GameObject/Items.h"
 
 GSPlay::GSPlay() {}
 GSPlay::~GSPlay() {}
@@ -81,22 +82,39 @@ void GSPlay::Init()
 		isPaused = true;
 	});
 	
-	//Foods
+	// Foods
 	texture = ResourceManagers::GetInstance()->GetTexture("Items/Piece-of-cake_shadow.png");
-	food = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	food = std::make_shared<FallingObject>(texture, SDL_FLIP_NONE);
 	food->SetSize(60, 60);
-	food->Set2DPosition(SCREEN_WIDTH / 2 - 260, 0);
-
-    // Animation
-	texture = ResourceManagers::GetInstance()->GetTexture("image2.png");
-	obj = std::make_shared<SpriteAnimation>( texture, 1, 10, 1, 0.09f);
-	obj->SetFlip(SDL_FLIP_HORIZONTAL);
-	obj->SetSize(106, 120);
-	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT/2 + 120);
+	food->Set2DPosition(260, food->GetHeight() * -1);
 	
-	//Camera::GetInstance()->SetTarget(obj);
+
+    // Normal animation
+	texture = ResourceManagers::GetInstance()->GetTexture("normal19.png");
+	obj = std::make_shared<SpriteAnimation>( texture, 1, 19, 1, 0.04f);
+	obj->SetFlip(SDL_FLIP_HORIZONTAL);
+	obj->SetSize(150, 143);
+	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT/2 + 120);
 	m_listAnimation.push_back(obj);
+
+	// Eat animation
+	//texture = ResourceManagers::GetInstance()->GetTexture("eating21.png");
+	//obj = std::make_shared<SpriteAnimation>(texture, 1, 21, 1, 0.03f);
+	//obj->SetFlip(SDL_FLIP_HORIZONTAL);
+	//obj->SetSize(150, 143);
+	//obj->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT / 2 + 120);
+	//m_listAnimation.push_back(obj);
 	m_KeyPress = 0;
+
+	for (int i = 0; i < 10; i++) {
+		SpawnFood();
+	}
+}
+
+void GSPlay::SpawnFood()
+{
+	food->Spawn(SCREEN_WIDTH - food->GetWidth(), -food->GetHeight());
+	m_listFood.push_back(food);
 }
 
 void GSPlay::Exit()
@@ -142,7 +160,6 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 		default:
 			break;
 		}
-
 	}
 	////Key Up
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
@@ -165,7 +182,6 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 		default:
 			break;
 		}
-
 	}
 }
 
@@ -198,13 +214,30 @@ void GSPlay::Update(float deltaTime)
 			MoveDirection.x = 0;
 		}
 
-		Vector2 currentPosition = obj->Get2DPosition();
-		obj->Set2DPosition(currentPosition.x + MoveDirection.x * deltaTime * m_Velocity, SCREEN_HEIDHT / 2 + 150);
+		MoveDirection.y = 1;
+
+		Vector2 crtObjPosition = obj->Get2DPosition();
+		Vector2 crtFoodPosition = food->Get2DPosition();
+
+		obj->Set2DPosition(crtObjPosition.x + MoveDirection.x * deltaTime * m_VelocityX, SCREEN_HEIDHT / 2 + 150);
+
+		food->Set2DPosition(crtFoodPosition.x, crtFoodPosition.y + MoveDirection.y * deltaTime * m_VelocityY);
 
 		for (auto it : m_listAnimation)
 		{
 			it->Update(deltaTime);
 		}
+		for (auto food : m_listFood) {
+			food->Update(deltaTime);
+
+			// Check if food is out of bounds (reached the bottom of the screen)
+			if (food->Get2DPosition().y > SCREEN_HEIDHT) {
+				// Remove the food object from the list
+				m_listFood.erase(std::remove(m_listFood.begin(), m_listFood.end(), food), m_listFood.end());
+				SpawnFood();
+			}
+		}
+		//food->Update(deltaTime);
 	}
 	else {
 		//
@@ -217,7 +250,9 @@ void GSPlay::Update(float deltaTime)
 void GSPlay::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
-	food->Draw(renderer);
+	for (auto food : m_listFood) {
+		food->Draw(renderer);
+	}
 	for (auto it : m_listAnimation)
 	{
 		it->Draw(renderer);
@@ -229,6 +264,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 150);
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_MUL);
 		SDL_RenderFillRect(renderer, &rect);
+
 		frm->Draw(renderer);
 		for (auto it : m_listButton)
 		{
