@@ -21,10 +21,10 @@ void GSOption::Init()
 	m_background->Set2DPosition(0, 0);
 
 	//option frame
-	texture = ResourceManagers::GetInstance()->GetTexture("popupinner-slow.jpg");
+	texture = ResourceManagers::GetInstance()->GetTexture("frame-wood.png");
 	frm = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
-	frm->SetSize(577, 364);
-	frm->Set2DPosition(SCREEN_WIDTH / 2 - 288.5, SCREEN_HEIDHT / 2 - 182);
+	frm->SetSize(868, 646);
+	frm->Set2DPosition((SCREEN_WIDTH - frm->GetWidth()) / 2, (SCREEN_HEIDHT - frm->GetHeight()) / 2);
 
 	// exit button
 	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");

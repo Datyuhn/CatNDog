@@ -21,10 +21,10 @@ void GSGuide::Init()
 	m_background->Set2DPosition(0, 0);
 
 	//guide frame
-	texture = ResourceManagers::GetInstance()->GetTexture("popupinner-slow.jpg");
+	texture = ResourceManagers::GetInstance()->GetTexture("frame-wood.png");
 	guideFrm = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
-	guideFrm->SetSize(577, 364);
-	guideFrm->Set2DPosition(SCREEN_WIDTH / 2 - 288.5, SCREEN_HEIDHT / 2 - 182);
+	guideFrm->SetSize(868, 646);
+	guideFrm->Set2DPosition((SCREEN_WIDTH - guideFrm->GetWidth()) / 2, (SCREEN_HEIDHT - guideFrm->GetHeight()) / 2);
 
 	// exit button
 	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");

@@ -41,8 +41,8 @@ private:
 	std::shared_ptr<SpriteAnimation>			obj;
 	Vector2										MoveDirection;
 	float										time = 0.0f;
-	float										m_VelocityX = 250.0f;
-	float										m_VelocityY = 150.0f;
+	float										m_VelocityX = 600.0f;
+	float										m_VelocityY = 450.0f;
 	bool isPaused = false;
 };
 

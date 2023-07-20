@@ -81,13 +81,6 @@ void GSPlay::Init()
 	btnPause->SetOnClick([this]() {
 		isPaused = true;
 	});
-	
-	// Foods
-	texture = ResourceManagers::GetInstance()->GetTexture("Items/Piece-of-cake_shadow.png");
-	food = std::make_shared<FallingObject>(texture, SDL_FLIP_NONE);
-	food->SetSize(60, 60);
-	food->Set2DPosition(260, food->GetHeight() * -1);
-	
 
     // Normal animation
 	texture = ResourceManagers::GetInstance()->GetTexture("normal19.png");
@@ -104,6 +97,14 @@ void GSPlay::Init()
 	//obj->SetSize(150, 143);
 	//obj->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT / 2 + 120);
 	//m_listAnimation.push_back(obj);
+
+	// Foods
+	texture = ResourceManagers::GetInstance()->GetTexture("Items/Piece-of-cake_shadow.png");
+	food = std::make_shared<FallingObject>(texture, SDL_FLIP_NONE);
+	food->SetSize(60, 60);
+	food->Set2DPosition(260, food->GetHeight() * -1);
+	m_listFood.push_back(food);
+
 	m_KeyPress = 0;
 
 	for (int i = 0; i < 10; i++) {
@@ -114,7 +115,7 @@ void GSPlay::Init()
 void GSPlay::SpawnFood()
 {
 	food->Spawn(SCREEN_WIDTH - food->GetWidth(), -food->GetHeight());
-	m_listFood.push_back(food);
+	// m_listFood.push_back(food);
 }
 
 void GSPlay::Exit()
@@ -232,8 +233,8 @@ void GSPlay::Update(float deltaTime)
 
 			// Check if food is out of bounds (reached the bottom of the screen)
 			if (food->Get2DPosition().y > SCREEN_HEIDHT) {
-				// Remove the food object from the list
-				m_listFood.erase(std::remove(m_listFood.begin(), m_listFood.end(), food), m_listFood.end());
+			//	// Remove the food object from the list
+			//	m_listFood.erase(std::remove(m_listFood.begin(), m_listFood.end(), food), m_listFood.end());
 				SpawnFood();
 			}
 		}

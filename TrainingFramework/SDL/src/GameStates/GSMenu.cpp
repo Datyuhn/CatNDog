@@ -21,7 +21,7 @@ void GSMenu::Init()
 	m_background->Set2DPosition(0, 0);
 
 	// play button
-	texture = ResourceManagers::GetInstance()->GetTexture("mBtn_red.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("play1-removebg-preview.png");
 	std::shared_ptr<MouseButton> btnPlay = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 
 	btnPlay->SetSize(317, 90);
@@ -32,7 +32,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnPlay);
 
 	// how to play button
-	texture = ResourceManagers::GetInstance()->GetTexture("mBtn_yel.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("htp-removebg-preview.png");
 	std::shared_ptr<MouseButton> btnGuide = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 
 	btnGuide->SetSize(317, 90);
@@ -43,7 +43,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnGuide);
 
 	// option button
-	texture = ResourceManagers::GetInstance()->GetTexture("mBtn_red.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("option-removebg-preview.png");
 	std::shared_ptr<MouseButton> btnOption = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 
 	btnOption->SetSize(317, 90);
@@ -54,7 +54,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnOption);
 
 	// exit button
-	texture = ResourceManagers::GetInstance()->GetTexture("mBtn_yel.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("exit-removebg-preview.png");
 	std::shared_ptr<MouseButton> btnClose = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	//btnClose = std::make_shared<MouseButton>(texture);
 	btnClose->SetSize(317, 90);
