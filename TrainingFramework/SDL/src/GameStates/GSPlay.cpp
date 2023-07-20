@@ -6,11 +6,11 @@
 #include "GameObject/Camera.h"
 #include "GameObject/FallingObject.h"
 #include "GameObject/Items.h"
+#include "GameObject/Collision.h"
 
 GSPlay::GSPlay() {}
 GSPlay::~GSPlay() {}
 
-static bool g_isPaused = false;
 
 void GSPlay::Init()
 {
@@ -110,6 +110,7 @@ void GSPlay::Init()
 	for (int i = 0; i < 10; i++) {
 		SpawnFood();
 	}
+
 }
 
 void GSPlay::SpawnFood()
@@ -224,18 +225,26 @@ void GSPlay::Update(float deltaTime)
 
 		food->Set2DPosition(crtFoodPosition.x, crtFoodPosition.y + MoveDirection.y * deltaTime * m_VelocityY);
 
+		SDL_Rect character = { (int)crtObjPosition.x, (int)crtObjPosition.y, obj->GetWidth(), obj->GetHeight() };
+		SDL_Rect item = { (int)crtFoodPosition.x, (int)crtFoodPosition.y, food->GetWidth(), food->GetHeight() };
+		
+
 		for (auto it : m_listAnimation)
 		{
 			it->Update(deltaTime);
 		}
+
 		for (auto food : m_listFood) {
 			food->Update(deltaTime);
-
-			// Check if food is out of bounds (reached the bottom of the screen)
-			if (food->Get2DPosition().y > SCREEN_HEIDHT) {
-			//	// Remove the food object from the list
-			//	m_listFood.erase(std::remove(m_listFood.begin(), m_listFood.end(), food), m_listFood.end());
+			if (Collision::checkCollision(character, item)) {
 				SpawnFood();
+			}
+		}
+		
+		for (auto food : m_listFood) {
+			food->Update(deltaTime);	
+			if (food->Get2DPosition().y > SCREEN_HEIDHT) {
+			SpawnFood();
 			}
 		}
 		//food->Update(deltaTime);

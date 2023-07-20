@@ -164,6 +164,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameObject\Collision.cpp" />
     <ClCompile Include="src\GameObject\Items.cpp" />
     <ClCompile Include="src\GameStates\GSOption.cpp" />
     <ClCompile Include="src\GameStates\GSGuide.cpp" />
@@ -189,6 +190,7 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameObject\Collision.h" />
     <ClInclude Include="src\GameObject\Items.h" />
     <ClInclude Include="src\GameStates\GSOption.h" />
     <ClInclude Include="src\GameStates\GSGuide.h" />

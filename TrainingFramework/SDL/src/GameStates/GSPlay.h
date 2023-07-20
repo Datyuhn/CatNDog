@@ -1,12 +1,12 @@
 #pragma once
 #include "GameStateBase.h"
 #include "GameObject/MouseButton.h"
-//#include "GameObject/Text.h"
 
 class Sprite2D;
 class SpriteAnimation;
 class FallingObject;
 class Items;
+class Collision;
 
 class GSPlay :	public GameStateBase
 {
@@ -27,6 +27,7 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 	int		m_KeyPress;
+	//SDL_Rect& character, item;
 
 private:
 	std::shared_ptr<Sprite2D>					m_background, frm;
@@ -39,10 +40,11 @@ private:
 
 	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
 	std::shared_ptr<SpriteAnimation>			obj;
-	Vector2										MoveDirection;
-	float										time = 0.0f;
-	float										m_VelocityX = 600.0f;
-	float										m_VelocityY = 450.0f;
-	bool isPaused = false;
+	Vector2	MoveDirection;
+	float	time = 0.0f;
+	float	m_VelocityX = 600.0f;
+	float	m_VelocityY = 450.0f;
+	bool	isPaused = false;
+	bool	isActive = true;
 };
 
