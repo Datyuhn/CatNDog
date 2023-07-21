@@ -31,23 +31,10 @@ void SpriteAnimation::Draw(SDL_Renderer* renderer)
 	{
 		m_pTexture->RenderFrame(m_position.x, m_position.y, m_iWidth, m_iHeight, m_spriteRow, m_currentFrame, m_frameCount, m_numAction, m_angle, m_flip);
 	}
+	/*SDL_Rect collider = { (int)m_position.x + 70, (int)m_position.y + 75, m_iWidth - 110, m_iHeight - 130 };
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 150);
+	SDL_RenderDrawRect(renderer, &collider);*/
 }
-
-// Loop animation
-//void SpriteAnimation::Update(float deltatime)
-//{
-//	m_currentTicks += deltatime;
-//		if(m_currentTicks  >= m_frameTime) {
-//			if (reverseAnimation == 1) m_currentFrame++;
-//			else m_currentFrame--;
-//		if (m_currentFrame >= m_frameCount) {
-//			//m_currentFrame = 0;
-//			reverseAnimation = 0;
-//		}
-//		if (m_currentFrame <= 0) reverseAnimation = 1;
-//		m_currentTicks -= m_frameTime;
-//	}
-//}
 
 void SpriteAnimation::Update(float deltatime)
 {

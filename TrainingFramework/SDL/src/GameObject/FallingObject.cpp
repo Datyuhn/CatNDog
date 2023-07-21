@@ -18,6 +18,9 @@ void FallingObject::Draw(SDL_Renderer* renderer)
 	{
 		m_pTexture->Render(m_position.x, m_position.y, m_iWidth, m_iHeight, m_angle, m_flip);
 	}
+	SDL_Rect collider = { (int)m_position.x + 10, (int)m_position.y + 20, m_iWidth - 20, m_iHeight - 35 };
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 150);
+	SDL_RenderDrawRect(renderer, &collider);
 }
 
 void FallingObject::Update(float deltatime) {}

@@ -27,17 +27,17 @@ public:
 	SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float  frameTime);
 	~SpriteAnimation();
 
-	void		Init() override;
-	void		Draw(SDL_Renderer* renderer) override;
-	void		Update(float deltatime) override;
+	void	Init() override;
+	void	Draw(SDL_Renderer* renderer) override;
+	void	Update(float deltatime) override;
 
-	void		Set2DPosition(float x, float y);
-	void		SetRotation(double angle);
-	void		SetFlip (SDL_RendererFlip flip);
+	void	Set2DPosition(float x, float y);
+	void	SetRotation(double angle);
+	void	SetFlip (SDL_RendererFlip flip);
 
-	Vector2		Get2DPosition();
-	void		SetSize(int width, int height);
-	int GetWidth();
-	int GetHeight();
+	Vector2	Get2DPosition();
+	void	SetSize(int width, int height);
+	int		GetWidth();
+	int		GetHeight();
 
 };

@@ -82,7 +82,7 @@ void GSMenu::Init()
 	m_textGameName = std::make_shared<Text>("Data/BADABB__.ttf", m_textColor);
 	m_textGameName->SetSize(400, 65);
 	m_textGameName->Set2DPosition((SCREEN_WIDTH - m_textGameName->GetWidth())/2, SCREEN_HEIDHT / 2 - 260);
-	m_textGameName->LoadFromRenderText("I am hungry");
+	m_textGameName->LoadFromRenderText("Game");
 
 	m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
 	m_Sound->PlaySound();

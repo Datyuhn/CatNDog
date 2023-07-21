@@ -1,6 +1,7 @@
 #pragma once
 #include "GameStateBase.h"
 #include "GameObject/MouseButton.h"
+#include "GameObject/Text.h"
 
 class Sprite2D;
 class SpriteAnimation;
@@ -27,24 +28,29 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 	int		m_KeyPress;
-	//SDL_Rect& character, item;
+	SDL_Rect character, item;
 
 private:
 	std::shared_ptr<Sprite2D>					m_background, frm;
+	std::shared_ptr<Text>						m_score;
+
 	std::list<std::shared_ptr<FallingObject>>	m_listFood;
 	std::shared_ptr<FallingObject>				food;
 
-	//std::shared_ptr<Text>						m_score;
 	std::list<std::shared_ptr<MouseButton>>		m_listButton;
 	std::shared_ptr<MouseButton>				button, btnPause;
 
 	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
-	std::shared_ptr<SpriteAnimation>			obj;
+	std::shared_ptr<SpriteAnimation>			obj, player1;
 	Vector2	MoveDirection;
+	SDL_Color m_scoreColor = {255, 255, 255, 255};
+
 	float	time = 0.0f;
 	float	m_VelocityX = 600.0f;
-	float	m_VelocityY = 450.0f;
+	float	m_VelocityY = 250.0f;
+
 	bool	isPaused = false;
 	bool	isActive = true;
+	int g_point = 0;
 };
 

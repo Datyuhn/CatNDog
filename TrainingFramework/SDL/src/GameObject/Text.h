@@ -7,9 +7,9 @@ class Text: public Sprite2D
 {
 public:
 	Text(std::string fontPath,  SDL_Color textColor);
-	void		Init() override;
-	void		Draw(SDL_Renderer* renderer) override;
-	void		Update(float deltatime) override;
+	void Init() override;
+	void Draw(SDL_Renderer* renderer) override;
+	void Update(float deltatime) override;
 	void LoadFromRenderText(std::string textureText);
 private:
 	//std::shared_ptr<TextureManager> m_Texture;

@@ -1,8 +1,6 @@
 #include "Collision.h"
 
-Collision::Collision() {
-
-}
+Collision::Collision() {}
 Collision::~Collision() {}
 
 bool Collision::checkCollision(const SDL_Rect& rect1, const SDL_Rect& rect2) {
@@ -15,4 +13,3 @@ bool Collision::checkCollision(const SDL_Rect& rect1, const SDL_Rect& rect2) {
     }
     return false;
 }
-
