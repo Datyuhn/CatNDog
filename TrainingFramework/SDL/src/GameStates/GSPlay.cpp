@@ -17,15 +17,19 @@ void GSPlay::Init()
 	// auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bgr_09_p1.jpg");
 
-	m_score = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
-	m_score->SetSize(40, 40);
-	m_score->Set2DPosition(30, 30);
-
 	// background
 	m_background = std::make_shared<Sprite2D>( texture, SDL_FLIP_NONE);
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
 	m_background->Set2DPosition(0, 0);
 
+	texture = ResourceManagers::GetInstance()->GetTexture("floor.png");
+	floor = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	floor->SetSize(SCREEN_WIDTH, 150);
+	floor->Set2DPosition(-5, SCREEN_HEIDHT - floor->GetHeight() + 60);
+
+	m_score = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
+	m_score->SetSize(40, 40);
+	m_score->Set2DPosition(30, 30);
 	// how to play button
 	/*
 	texture = ResourceManagers::GetInstance()->GetTexture("mBtn_yel.png");
@@ -91,16 +95,16 @@ void GSPlay::Init()
 	obj = std::make_shared<SpriteAnimation>( texture, 1, 19, 1, 0.04f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
 	obj->SetSize(150, 144);
-	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT/2 + 120);
+	obj->Set2DPosition(SCREEN_WIDTH/2-60, SCREEN_HEIDHT - obj->GetHeight());
 	m_listAnimation.push_back(obj);
 
 	// Eat animation
-	/*texture = ResourceManagers::GetInstance()->GetTexture("eating21.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("eating21.png");
 	obj = std::make_shared<SpriteAnimation>(texture, 1, 21, 1, 0.03f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
-	obj->SetSize(150, 143);
-	obj->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT / 2 + 120);
-	m_listAnimation.push_back(obj);*/
+	obj->SetSize(150, 144);
+	obj->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT - obj->GetHeight());
+	m_listAnimation.push_back(obj);
 
 	// Foods
 	texture = ResourceManagers::GetInstance()->GetTexture("Items/Piece-of-cake_shadow.png");
@@ -109,6 +113,7 @@ void GSPlay::Init()
 	food->Set2DPosition(260, food->GetHeight() * -1);
 	m_listFood.push_back(food);
 
+	obj = m_listAnimation[0];
 	m_KeyPress = 0;
 
 	for (int i = 0; i < 10; i++) {
@@ -225,35 +230,36 @@ void GSPlay::Update(float deltaTime)
 		Vector2 crtObjPosition = obj->Get2DPosition();
 		Vector2 crtFoodPosition = food->Get2DPosition();
 
-		obj->Set2DPosition(crtObjPosition.x + MoveDirection.x * deltaTime * m_VelocityX, SCREEN_HEIDHT / 2 + 150);
+		obj->Set2DPosition(crtObjPosition.x + MoveDirection.x * deltaTime * m_VelocityX, SCREEN_HEIDHT - obj->GetHeight());
 
 		food->Set2DPosition(crtFoodPosition.x, crtFoodPosition.y + MoveDirection.y * deltaTime * m_VelocityY);
 
 		character = { (int)crtObjPosition.x+70, (int)crtObjPosition.y+75, obj->GetWidth()-110, obj->GetHeight()-130 };
 		item = { (int)crtFoodPosition.x+10, (int)crtFoodPosition.y+20, food->GetWidth()-20, food->GetHeight()-35 };
 		
-		for (auto it : m_listAnimation)
-		{
-			it->Update(deltaTime);
-		}
 
 		for (auto food : m_listFood) {
 			food->Update(deltaTime);
 			if (Collision::checkCollision(character, item)) {
 				g_point += 1;
 				SpawnFood();
+				obj = m_listAnimation[1];
 			}
 		}
-		std::string str = std::to_string(g_point);
-		m_score->LoadFromRenderText(str);
-
-		
+		if (SpriteAnimation::Change()) {
+			obj = m_listAnimation[0];
+		}
 		for (auto food : m_listFood) {
 			food->Update(deltaTime);	
 			if (food->Get2DPosition().y > SCREEN_HEIDHT) {
 			SpawnFood();
 			}
 		}
+		//for (auto obj : m_listAnimation) {
+		obj->Update(deltaTime);
+		//}
+		std::string str = std::to_string(g_point);
+		m_score->LoadFromRenderText(str);
 		//food->Update(deltaTime);
 	}
 	else {
@@ -267,10 +273,12 @@ void GSPlay::Update(float deltaTime)
 void GSPlay::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
-	for (auto it : m_listAnimation)
+	floor->Draw(renderer);
+	/*for (auto it : m_listAnimation)
 	{
 		it->Draw(renderer);
-	}
+	}*/
+	obj->Draw(renderer);
 	for (auto food : m_listFood) {
 		food->Draw(renderer);
 	}

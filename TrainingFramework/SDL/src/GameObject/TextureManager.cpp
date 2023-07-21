@@ -100,7 +100,6 @@ void TextureManager::RenderFrame(int x, int y, int width, int height, int row, i
 	SDL_RenderCopyEx(Renderer::GetInstance()->GetRenderer(), m_Texture, &srcRect, &dstRect, angle, nullptr, flip);
 }
 
-
 //Render frame vertical
 //void TextureManager::RenderFrame(int x, int y, int width, int height, int column, int currentframe, int framecount, int numAction, double angle, SDL_RendererFlip flip)
 //{

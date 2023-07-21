@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseObject.h"
 #include <SDL_render.h>
+
 class TextureManager;
 class SpriteAnimation : public BaseObject{
 protected:
@@ -19,7 +20,11 @@ protected:
 
 	Uint32	m_lastUpdate;
 	int		m_animSpeed;
-	int		m_numAction; //start from 1,2,3...
+	int		m_numAction;
+
+	/*std::vector<std::shared_ptr<SpriteAnimation>> p_skin;
+	std::shared_ptr<SpriteAnimation>				obj;*/
+
 	//SDL_RendererFlip m_flip;
 	//std::shared_ptr<TextureManager> m_texture;
 
@@ -30,6 +35,7 @@ public:
 	void	Init() override;
 	void	Draw(SDL_Renderer* renderer) override;
 	void	Update(float deltatime) override;
+	static bool	Change();
 
 	void	Set2DPosition(float x, float y);
 	void	SetRotation(double angle);
