@@ -2,6 +2,7 @@
 #include "GameStateBase.h"
 #include "GameObject/MouseButton.h"
 #include "GameObject/Text.h"
+#include "GameObject/Timer.h"
 #include <vector>
 
 class Sprite2D;
@@ -10,6 +11,7 @@ class SpriteAnimation;
 class FallingObject;
 class Items;
 class Collision;
+class Timer;
 
 class GSPlay :	public GameStateBase
 {
@@ -44,21 +46,23 @@ private:
 	std::list<std::shared_ptr<MouseButton>>			m_listButton;
 	std::shared_ptr<MouseButton>					button, btnPause;
 
-	std::list<std::shared_ptr<FallingObject>>		m_listFood;
+	std::vector<std::shared_ptr<FallingObject>>		m_listFood;
 	std::shared_ptr<FallingObject>					food;
 
 	std::vector<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
 	std::shared_ptr<SpriteAnimation>				obj;
 	
+	Timer g_timer, t_duration, food_timer;
+	
 	Vector2	MoveDirection;
 	SDL_Color m_scoreColor = {255, 255, 255, 255};
 	std::vector<SDL_Scancode> p_controlKey;
 
-
 	float time = 0.0f;
 	float m_VelocityX = 600.0f;
-	float m_VelocityY = 350.0f;
+	float m_VelocityY = 500.0f;
 	bool isPaused = false;
+	bool inTime = false;
 	bool isActive = true;
 	int	 g_point1, g_point2;
 };

@@ -10,6 +10,8 @@ public:
 	void Stop();
 	void Pause();
 	void UnPause();
+	void SetDuration(Uint32 duration);
+	Uint32 GetDuration();
 
 	//Getsthe timer's time
 	Uint32 GetTicks();
@@ -17,6 +19,8 @@ public:
 	bool IsStarted();
 	bool IsPaused();
 private:
+	//Duration time
+	Uint32 mDuration;
 	//The clock time when the timer started
 	Uint32 mStartTicks;
 	//The ticks stored when the timer was paused

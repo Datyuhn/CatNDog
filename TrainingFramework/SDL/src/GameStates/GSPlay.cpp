@@ -8,6 +8,7 @@
 #include "GameObject/Items.h"
 #include "GameObject/Collision.h"
 #include "GameObject/Player.h"
+#include "GameObject/Timer.h"
 
 GSPlay::GSPlay() {}
 GSPlay::~GSPlay() {}
@@ -18,91 +19,101 @@ void GSPlay::Init()
 	// auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bgr_09_p1.jpg");
 
-	/// Buttons
+	// background
+	m_background = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
+	m_background->Set2DPosition(0, 0);
+
+	// wall
+	texture = ResourceManagers::GetInstance()->GetTexture("wall.png");
+	wall = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	wall->SetSize(40, SCREEN_HEIDHT * 5/6);
+	wall->Set2DPosition((SCREEN_WIDTH - wall->GetWidth()) / 2 + 16, 70);
+
+	// floor
+	texture = ResourceManagers::GetInstance()->GetTexture("floor.png");
+	floor = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	floor->SetSize(SCREEN_WIDTH, 150);
+	floor->Set2DPosition(-5, SCREEN_HEIDHT - floor->GetHeight() + 60);
+
+	// score
+	m_score1 = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
+	m_score1->SetSize(150, 40);
+	m_score1->Set2DPosition((SCREEN_WIDTH - m_score1->GetWidth() / 4) / 4, 30);
+	m_listScore.push_back(m_score1);
+
+	m_score2 = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
+	m_score2->SetSize(150, 40);
+	m_score2->Set2DPosition((SCREEN_WIDTH - m_score1->GetWidth() / 4) * 3 / 4, 30);
+	m_listScore.push_back(m_score2);
+
+	///Button
 	{
-		// background
-		m_background = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
-		m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
-		m_background->Set2DPosition(0, 0);
-
-		// wall
-		texture = ResourceManagers::GetInstance()->GetTexture("wall.png");
-		wall = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
-		wall->SetSize(60, SCREEN_HEIDHT-100);
-		wall->Set2DPosition((SCREEN_WIDTH - wall->GetWidth()) / 2, 0);
-
-		texture = ResourceManagers::GetInstance()->GetTexture("floor.png");
-		floor = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
-		floor->SetSize(SCREEN_WIDTH, 150);
-		floor->Set2DPosition(-5, SCREEN_HEIDHT - floor->GetHeight() + 60);
-
-		// score
-		m_score1 = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
-		m_score1->SetSize(150, 40);
-		m_score1->Set2DPosition((SCREEN_WIDTH - m_score1->GetWidth() / 4) / 4, 30);
-		m_listScore.push_back(m_score1);
-
-		m_score2 = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
-		m_score2->SetSize(150, 40);
-		m_score2->Set2DPosition((SCREEN_WIDTH - m_score1->GetWidth() / 4) * 3 / 4, 30);
-		m_listScore.push_back(m_score2);
-
-		// how to play button
-		/*
-		texture = ResourceManagers::GetInstance()->GetTexture("mBtn_yel.png");
-		std::shared_ptr<MouseButton> btnGuide = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
-
-		btnGuide->SetSize(317, 90);
-		btnGuide->Set2DPosition((SCREEN_WIDTH - btnGuide->GetWidth()) / 2, (SCREEN_HEIDHT - btnGuide->GetHeight()) / 2 + 70);
-		btnGuide->SetOnClick([]() {
-			GameStateMachine::GetInstance()->ChangeState(StateType::STATE_GUIDE);
-			});
-		m_listButton.push_back(btnGuide);
-		*/
-
-		// main menu button
-		texture = ResourceManagers::GetInstance()->GetTexture("btn_menu.tga");
-		button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
-
-		button->SetSize(80, 80);
-		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 + 120, (SCREEN_HEIDHT - button->GetHeight()) / 2);
-		button->SetOnClick([]() {
-			GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
-			});
-		m_listButton.push_back(button);
-
-		// restart button
-		texture = ResourceManagers::GetInstance()->GetTexture("btn_restart.tga");
-		button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
-
-		button->SetSize(80, 80);
-		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 - 0, (SCREEN_HEIDHT - button->GetHeight()) / 2);
-		button->SetOnClick([]() {
-			GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
-			});
-		m_listButton.push_back(button);
-
 		// resume button
-		texture = ResourceManagers::GetInstance()->GetTexture("btn_play.tga");
+		texture = ResourceManagers::GetInstance()->GetTexture("x.png");
 		button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
-		button->SetSize(80, 80);
-		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 - 120, (SCREEN_HEIDHT - button->GetHeight()) / 2);
+		button->SetSize(352 / 5, 372 / 5);
+		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2, (SCREEN_HEIDHT - button->GetHeight()) / 2 + 150);
 		button->SetOnClick([this]() {
 			isPaused = false;
 			});
 		m_listButton.push_back(button);
 
+		// restart button
+		texture = ResourceManagers::GetInstance()->GetTexture("restart.png");
+		button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
+
+		button->SetSize(120, 120);
+		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 - 192, (SCREEN_HEIDHT - button->GetHeight()) / 2);
+		button->SetOnClick([]() {
+			GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
+			});
+		m_listButton.push_back(button);
+
+		// main menu button
+		texture = ResourceManagers::GetInstance()->GetTexture("home.png"); 
+		button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE); 
+
+		button->SetSize(120, 120); 
+		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 - 64, (SCREEN_HEIDHT - button->GetHeight()) / 2);
+		button->SetOnClick([]() { 
+			GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU); 
+			}); 
+		m_listButton.push_back(button); 
+
+		// Music sound button
+		texture = ResourceManagers::GetInstance()->GetTexture("turnonvolume.png");
+		button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
+
+		button->SetSize(120, 120); 
+		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 + 64, (SCREEN_HEIDHT - button->GetHeight()) / 2);
+		button->SetOnClick([]() {
+			//Turn on sound
+			});
+		m_listButton.push_back(button);
+
+		// Music sound button
+		texture = ResourceManagers::GetInstance()->GetTexture("turnoffvolume.png");
+		button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE); 
+
+		button->SetSize(120, 120); 
+		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 + 192, (SCREEN_HEIDHT - button->GetHeight()) / 2);
+		button->SetOnClick([]() {
+			//Turn off sound
+			});
+		m_listButton.push_back(button);
+
 		// Pause frame
-		auto b_pause = ResourceManagers::GetInstance()->GetTexture("mBtn_yel.png");
+		auto b_pause = ResourceManagers::GetInstance()->GetTexture("frame-wood.png");
 		frm = std::make_shared<Sprite2D>(b_pause, SDL_FLIP_NONE);
-		frm->SetSize(588, 170);
+		frm->SetSize(694, 516);
 		frm->Set2DPosition((SCREEN_WIDTH - frm->GetWidth()) / 2, (SCREEN_HEIDHT - frm->GetHeight()) / 2);
 
 		// pause button
-		texture = ResourceManagers::GetInstance()->GetTexture("btn_pause.tga");
+		texture = ResourceManagers::GetInstance()->GetTexture("setting.png");
 		btnPause = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
-		btnPause->SetSize(80, 80);
-		btnPause->Set2DPosition(SCREEN_WIDTH - 90, 10);
+		btnPause->SetSize(100, 100);
+		btnPause->Set2DPosition(SCREEN_WIDTH - 110, 10);
 		btnPause->SetOnClick([this]() {
 			isPaused = true;
 			});
@@ -110,13 +121,13 @@ void GSPlay::Init()
 
 	// Character 1
 	texture = ResourceManagers::GetInstance()->GetTexture("normal19_1.png");
-	p1 = std::make_shared<Player>(1, -30, (SCREEN_WIDTH - wall->GetWidth())/2 - 130);
+	p1 = std::make_shared<Player>(1, -30, (SCREEN_WIDTH - wall->GetWidth())/2 - 125);
 	p1->SetControl({ SDL_SCANCODE_A, SDL_SCANCODE_D });
 	m_listCharacter.push_back(p1);
 
 	// Character 2
 	texture = ResourceManagers::GetInstance()->GetTexture("normal19_2.png");
-	p2 = std::make_shared<Player>(2, (SCREEN_WIDTH + wall->GetWidth())/2 - 40, SCREEN_WIDTH - 150);
+	p2 = std::make_shared<Player>(2, (SCREEN_WIDTH + wall->GetWidth())/2 - 25, SCREEN_WIDTH - 150);
 	p2->SetControl({ SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT });
 	m_listCharacter.push_back(p2);
 
@@ -127,13 +138,28 @@ void GSPlay::Init()
 	food->Set2DPosition(260, food->GetHeight() * -1);
 	m_listFood.push_back(food);
 
+	texture = ResourceManagers::GetInstance()->GetTexture("Items/Cupcake_shadow.png");
+	food = std::make_shared<FallingObject>(texture, SDL_FLIP_NONE);
+	food->SetSize(60, 60);
+	food->Set2DPosition(260, food->GetHeight() * -1);
+	m_listFood.push_back(food);
+
 	m_KeyPress = 0;
 	g_point1 = 0;
 	g_point2 = 0;
+
+	if (!g_timer.IsStarted()) {
+		g_timer.Start();
+	}
+	g_timer.SetDuration(3000);
+	food_timer.SetDuration(500);
+	food_timer.Start();
 }
 
 void GSPlay::SpawnFood()
 {
+	int index = rand() % m_listFood.size();
+	food = m_listFood[index];
 	food->Spawn(SCREEN_WIDTH - food->GetWidth(), -food->GetHeight());
 }
 
@@ -193,39 +219,50 @@ void GSPlay::Update(float deltaTime)
 	p_char2 = { (int)crtPos2.x + 70, (int)crtPos1.y + 75, p2->GetWidth() - 110, p2->GetHeight() - 130 };
 	item = { (int)crtFoodPosition.x + 20, (int)crtFoodPosition.y +30, food->GetWidth() - 20, food->GetHeight() - 35 };
 
+	/*Uint32 countTime = g_timer.GetTicks();
+	if (countTime >= g_timer.GetDuration()) 
+	{ 
+		t_duration.SetDuration(120000);
+	 	inTime = true;
+	 	t_duration.Start();
+	}*/	
+
 	if (!isPaused) {
+		if (Collision::checkCollision(p_char1, item)) {
+			g_point1++;
+		}
+		if (Collision::checkCollision(p_char2, item)) {
+			g_point2++;
+		}
+
+		if (food_timer.GetTicks() >= food_timer.GetDuration()) { 
+			SpawnFood();
+			food_timer.Start();
+		}
+
 		for (auto food : m_listFood) {
 			food->Update(deltaTime);
-			if (Collision::checkCollision(p_char1, item)) {
-				g_point1++;
-				SpawnFood();
-			}
-			if (Collision::checkCollision(p_char2, item)) {
-				g_point2++;
-				SpawnFood();
-			}
 		}
-		for (auto food : m_listFood) {
-			food->Update(deltaTime);
-			if (food->Get2DPosition().y > SCREEN_HEIDHT) {
-				SpawnFood();
-			}
-		}
-		
+
 		std::string str1 = "Score:" + std::to_string(g_point1);
 		m_score1->LoadFromRenderText(str1);
-
 		std::string str2 = "Score:" + std::to_string(g_point2);
 		m_score2->LoadFromRenderText(str2);
 
+		if (t_duration.GetTicks() >= t_duration.GetDuration())
+		{
+			isPaused = true;
+		}
+		
 		for (auto it : m_listScore) {
 			it->Update(deltaTime);
 		}
+
 		p1->Update(deltaTime);
 		p2->Update(deltaTime);
 	}
 	else {
-
+		
 	}
 	//Update position of camera
 	//Camera::GetInstance()->Update(deltaTime);

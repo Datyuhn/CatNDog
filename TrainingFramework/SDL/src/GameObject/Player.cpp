@@ -72,7 +72,6 @@ void Player::HandleKeyEvents(SDL_Event& e)
 {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0) //For e.key.repeat it's because key repeat is enabled by default and if you press and hold a key it will report multiple key presses. That means we have to check if the key press is the first one because we only care when the key was first pressed.
 	{
-		//Adjust the velocity
 		if (e.key.keysym.scancode == p_controlKey[0])
 		{
 			m_KeyPress |= 1;
@@ -84,7 +83,6 @@ void Player::HandleKeyEvents(SDL_Event& e)
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-		//Adjust the velocity
 		if (e.key.keysym.scancode == p_controlKey[0])
 		{
 			m_KeyPress ^= 1;
@@ -101,11 +99,11 @@ void Player::Update(float deltaTime)
 	Vector2 posPlayer = crtAnimation->Get2DPosition();
 	if (m_KeyPress == 1)
 	{
-		posPlayer.x -= 300 * deltaTime;
+		posPlayer.x -= 700 * deltaTime;
 	}
 	if (m_KeyPress == 4)
 	{
-		posPlayer.x += 300 * deltaTime;
+		posPlayer.x += 700 * deltaTime;
 	}
 	if (posPlayer.x < m_boundLeft) {
 		posPlayer.x = m_boundLeft;

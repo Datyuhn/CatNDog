@@ -76,6 +76,16 @@ Uint32 Timer::GetTicks()
 	}
 	return time;
 }
+void Timer::SetDuration(Uint32 duration) 
+{
+	mDuration = duration;
+}
+
+Uint32 Timer::GetDuration()
+{
+	return mDuration;
+}
+
 bool Timer::IsStarted()
 {
 	//Timer is running and paused or unpaused
