@@ -3,9 +3,10 @@
 #include <SDL_scancode.h>
 #include <SDL_render.h>
 #include "GameObject/SpriteAnimation.h"
+#include <vector>
 
-Player::Player(std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float frameTime, SDL_RendererFlip flip)
-	: BaseObject(texture), m_iWidth(100), m_iHeight(50), g_point(0)
+Player::Player(int playerID, std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float frameTime, SDL_RendererFlip flip)
+	: BaseObject(texture), m_iWidth(100), m_iHeight(50), g_point(0), m_playerID(playerID)
 {
 	m_spriteRow = spriteRow;
 	m_frameCount = frameCount;
@@ -16,6 +17,7 @@ Player::Player(std::shared_ptr<TextureManager> texture, int spriteRow, int frame
 	m_currentTicks = 0;
 	m_lastUpdate = SDL_GetTicks();
 	m_flip = flip;
+	m_playerID = playerID;
 	Init();
 }
 
@@ -23,22 +25,24 @@ Player::~Player() {}
 
 void Player::Init()
 {
-	auto texture = ResourceManagers::GetInstance()->GetTexture("");
-	
 	// Normal animation
-	texture = ResourceManagers::GetInstance()->GetTexture("normal19.png");
+	text = "normal19_" + std::to_string(m_playerID) + ".png";
+	auto texture = ResourceManagers::GetInstance()->GetTexture(text);
+	
 	crtAnimation = std::make_shared<SpriteAnimation>(texture, 1, 19, 1, 0.04f);
-	crtAnimation->SetFlip(SDL_FLIP_HORIZONTAL);
-	crtAnimation->SetSize(150, 144);
-	crtAnimation->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT - crtAnimation->GetHeight());
+	//crtAnimation->SetFlip(SDL_FLIP_HORIZONTAL);
+	//crtAnimation->SetSize(150, 144);
+	//crtAnimation->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT - crtAnimation->GetHeight());
 	m_listAnimation.push_back(crtAnimation);
 
 	// Eat animation
-	texture = ResourceManagers::GetInstance()->GetTexture("eating21.png");
+	text = "eating21_" + std::to_string(m_playerID) + ".png";
+	texture = ResourceManagers::GetInstance()->GetTexture(text);
+
 	crtAnimation = std::make_shared<SpriteAnimation>(texture, 1, 21, 1, 0.03f);
-	crtAnimation->SetFlip(SDL_FLIP_HORIZONTAL);
-	crtAnimation->SetSize(150, 144);
-	crtAnimation->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT - crtAnimation->GetHeight());
+	//crtAnimation->SetFlip(SDL_FLIP_HORIZONTAL);
+	//crtAnimation->SetSize(150, 144);
+	//crtAnimation->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT - crtAnimation->GetHeight());
 	m_listAnimation.push_back(crtAnimation);
 
 	crtAnimation = m_listAnimation[0];
@@ -50,41 +54,40 @@ void Player::Draw(SDL_Renderer* renderer)
 	{
 		m_pTexture->RenderFrame(m_position.x, m_position.y, m_iWidth, m_iHeight, m_spriteRow, m_currentFrame, m_frameCount, m_numAction, m_angle, m_flip);
 	}
-	SDL_Rect collider = { (int)m_position.x + 70, (int)m_position.y + 75, m_iWidth - 110, m_iHeight - 130 };
+	/*SDL_Rect collider = { (int)m_position.x + 70, (int)m_position.y + 75, m_iWidth - 110, m_iHeight - 130 };
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 150);
-	SDL_RenderDrawRect(renderer, &collider);
+	SDL_RenderDrawRect(renderer, &collider);*/
 }
 
-void Player::HandleKeyEvents(SDL_Event& e) 
+void Player::SetControl(const std::vector<SDL_Scancode>& p_control)
+{
+	p_controlKey = p_control;
+}
+
+void Player::HandleKeyEvents(SDL_Event& e)
 {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0) //For e.key.repeat it's because key repeat is enabled by default and if you press and hold a key it will report multiple key presses. That means we have to check if the key press is the first one because we only care when the key was first pressed.
 	{
 		//Adjust the velocity
-		switch (e.key.keysym.sym)
+		if (e.key.keysym.scancode == p_controlKey[0])
 		{
-		case SDLK_LEFT:
 			m_KeyPress |= 1;
-			break;
-		case SDLK_RIGHT:
+		}
+		else if (e.key.keysym.scancode == p_controlKey[1])
+		{
 			m_KeyPress |= 1 << 2;
-			break;
-		default:
-			break;
 		}
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
 		//Adjust the velocity
-		switch (e.key.keysym.sym)
+		if (e.key.keysym.scancode == p_controlKey[0])
 		{
-		case SDLK_LEFT:
 			m_KeyPress ^= 1;
-			break;
-		case SDLK_RIGHT:
+		}
+		else if (e.key.keysym.scancode == p_controlKey[1])
+		{
 			m_KeyPress ^= 1 << 2;
-			break;
-		default:
-			break;
 		}
 	}
 }
@@ -93,18 +96,15 @@ void Player::Update(float deltaTime)
 {
 		if (m_KeyPress & 1) {
 			MoveDirection.x = -1;
-			//crtAnimation = m_listAnimation[0];
 		}
 		else if (m_KeyPress & 4) {
 			MoveDirection.x = 1;
-			//crtAnimation = m_listAnimation[0];
 		}
 		else {
 			MoveDirection.x = 0;
-			//crtAnimation = m_listAnimation[0];
 		}
 
-		MoveDirection.y = 1;
+		//MoveDirection.y = 1;
 
 		Vector2 crtObjPosition = m_listAnimation[0]->Get2DPosition();
 		//Vector2 crtFoodPosition = food->Get2DPosition();
@@ -134,6 +134,7 @@ void Player::Update(float deltaTime)
 		std::string str = std::to_string(g_point);
 		m_score->LoadFromRenderText(str);*/
 
+		m_listAnimation[0]->Update(deltaTime);
 }
 
 void Player::SetSize(int width, int height)

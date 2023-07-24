@@ -33,6 +33,8 @@ public:
 
 private:
 	std::shared_ptr<Sprite2D>						m_background, frm, floor;
+
+	std::vector<std::shared_ptr<Player>>			m_listCharacter;
 	std::shared_ptr<Player>							p1, p2;
 
 	std::shared_ptr<Text>							m_score;
@@ -54,6 +56,6 @@ private:
 
 	bool isPaused = false;
 	bool isActive = true;
-	int	 g_point = 0;
+	int	 g_point_1, g_point_2;
 };
 

@@ -48,7 +48,7 @@ void SpriteAnimation::Update(float deltatime)
 	m_lastUpdate = SDL_GetTicks();
 	m_currentFrame = static_cast<int>((m_lastUpdate / static_cast<Uint32>(m_frameTime * 1000.0f)) % static_cast<Uint32>(m_frameCount));
 	if (m_currentFrame == m_frameCount - 1) {
-
+		SpriteAnimation::Change();
 	}
 }
 
