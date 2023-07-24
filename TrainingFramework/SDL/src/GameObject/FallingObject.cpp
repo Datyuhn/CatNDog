@@ -1,5 +1,7 @@
 #include "FallingObject.h"
 #include "TextureManager.h"
+#include "ResourceManagers.h"
+
 
 FallingObject::FallingObject(std::shared_ptr<TextureManager> texture, SDL_RendererFlip flip)
 	:BaseObject(texture), m_iWidth(100), m_iHeight(50)
@@ -10,7 +12,9 @@ FallingObject::FallingObject(std::shared_ptr<TextureManager> texture, SDL_Render
 
 FallingObject::~FallingObject() {}
 
-void FallingObject::Init() {}
+void FallingObject::Init() {
+
+}
 
 void FallingObject::Draw(SDL_Renderer* renderer)
 {
@@ -23,7 +27,9 @@ void FallingObject::Draw(SDL_Renderer* renderer)
 	SDL_RenderDrawRect(renderer, &collider);
 }
 
-void FallingObject::Update(float deltatime) {}
+void FallingObject::Update(float deltatime) {
+
+}
 
 void FallingObject::SetSize(int width, int height)
 {

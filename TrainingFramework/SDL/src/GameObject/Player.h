@@ -14,12 +14,13 @@ class Player
 {
 protected:
 	int m_playerID;
+	int m_boundLeft, m_boundRight;
 	std::string text;
 	std::vector<SDL_Scancode> p_controlKey;
 	Vector2 m_playerPos;
 public:
 	Player() {}
-	Player(int playerID);
+	Player(int playerID, int boundLeft, int boundRight);
 	~Player();
 
 	void	Init();

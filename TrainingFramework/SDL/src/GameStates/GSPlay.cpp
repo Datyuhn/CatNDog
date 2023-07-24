@@ -25,6 +25,12 @@ void GSPlay::Init()
 		m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
 		m_background->Set2DPosition(0, 0);
 
+		// wall
+		texture = ResourceManagers::GetInstance()->GetTexture("wall.png");
+		wall = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+		wall->SetSize(60, SCREEN_HEIDHT-100);
+		wall->Set2DPosition((SCREEN_WIDTH - wall->GetWidth()) / 2, 0);
+
 		texture = ResourceManagers::GetInstance()->GetTexture("floor.png");
 		floor = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
 		floor->SetSize(SCREEN_WIDTH, 150);
@@ -32,15 +38,14 @@ void GSPlay::Init()
 
 		// score
 		m_score1 = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
-		m_score1->SetSize(40, 40);
-		m_score1->Set2DPosition(30, 30);
+		m_score1->SetSize(150, 40);
+		m_score1->Set2DPosition((SCREEN_WIDTH - m_score1->GetWidth() / 4) / 4, 30);
 		m_listScore.push_back(m_score1);
 
 		m_score2 = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
-		m_score2->SetSize(40, 40);
-		m_score2->Set2DPosition(SCREEN_WIDTH / 2 + 30, 30);
+		m_score2->SetSize(150, 40);
+		m_score2->Set2DPosition((SCREEN_WIDTH - m_score1->GetWidth() / 4) * 3 / 4, 30);
 		m_listScore.push_back(m_score2);
-
 
 		// how to play button
 		/*
@@ -105,13 +110,13 @@ void GSPlay::Init()
 
 	// Character 1
 	texture = ResourceManagers::GetInstance()->GetTexture("normal19_1.png");
-	p1 = std::make_shared<Player>(1);
+	p1 = std::make_shared<Player>(1, -30, (SCREEN_WIDTH - wall->GetWidth())/2 - 130);
 	p1->SetControl({ SDL_SCANCODE_A, SDL_SCANCODE_D });
 	m_listCharacter.push_back(p1);
 
 	// Character 2
 	texture = ResourceManagers::GetInstance()->GetTexture("normal19_2.png");
-	p2 = std::make_shared<Player>(2);
+	p2 = std::make_shared<Player>(2, (SCREEN_WIDTH + wall->GetWidth())/2 - 40, SCREEN_WIDTH - 150);
 	p2->SetControl({ SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT });
 	m_listCharacter.push_back(p2);
 
@@ -186,7 +191,7 @@ void GSPlay::Update(float deltaTime)
 
 	p_char1 = { (int)crtPos1.x + 70, (int)crtPos1.y + 75, p1->GetWidth() - 110, p1->GetHeight() - 130 };
 	p_char2 = { (int)crtPos2.x + 70, (int)crtPos1.y + 75, p2->GetWidth() - 110, p2->GetHeight() - 130 };
-	item = { (int)crtFoodPosition.x + 10, (int)crtFoodPosition.y + 20, food->GetWidth() - 20, food->GetHeight() - 35 };
+	item = { (int)crtFoodPosition.x + 20, (int)crtFoodPosition.y +30, food->GetWidth() - 20, food->GetHeight() - 35 };
 
 	if (!isPaused) {
 		for (auto food : m_listFood) {
@@ -207,10 +212,10 @@ void GSPlay::Update(float deltaTime)
 			}
 		}
 		
-		std::string str1 = std::to_string(g_point1);
+		std::string str1 = "Score:" + std::to_string(g_point1);
 		m_score1->LoadFromRenderText(str1);
 
-		std::string str2 = std::to_string(g_point2);
+		std::string str2 = "Score:" + std::to_string(g_point2);
 		m_score2->LoadFromRenderText(str2);
 
 		for (auto it : m_listScore) {
@@ -230,6 +235,7 @@ void GSPlay::Update(float deltaTime)
 void GSPlay::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
+	wall->Draw(renderer);
 	floor->Draw(renderer);
 
 	for (auto it : m_listCharacter)

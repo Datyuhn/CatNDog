@@ -6,9 +6,11 @@
 #include <vector>
 #include "ResourceManagers.h"
 #include "Define.h"
-Player::Player(int playerID)
+Player::Player(int playerID, int boundLeft, int boundRight)
 {
 	m_playerID = playerID;
+	m_boundLeft = boundLeft;
+	m_boundRight = boundRight;
 	Init();
 	m_KeyPress = 0;
 }
@@ -26,11 +28,11 @@ void Player::Init()
 	crtAnimation->SetSize(150, 144);
 	if (m_playerID == 1)
 	{
-		crtAnimation->Set2DPosition((SCREEN_WIDTH - crtAnimation->GetWidth() / 2) / 4, SCREEN_HEIDHT - crtAnimation->GetHeight() - 20);
+		crtAnimation->Set2DPosition((SCREEN_WIDTH - crtAnimation->GetWidth() / 2) / 4, SCREEN_HEIDHT - crtAnimation->GetHeight() - 60);
 	}
 	else
 	{
-		crtAnimation->Set2DPosition((SCREEN_WIDTH - crtAnimation->GetWidth() / 2) * 3 / 4, SCREEN_HEIDHT - crtAnimation->GetHeight() - 20);
+		crtAnimation->Set2DPosition((SCREEN_WIDTH - crtAnimation->GetWidth() / 2) * 3 / 4, SCREEN_HEIDHT - crtAnimation->GetHeight() - 60);
 	}
 
 	// Eat animation
@@ -105,6 +107,12 @@ void Player::Update(float deltaTime)
 	{
 		posPlayer.x += 300 * deltaTime;
 	}
+	if (posPlayer.x < m_boundLeft) {
+		posPlayer.x = m_boundLeft;
+	}
+	else if (posPlayer.x > m_boundRight) {
+		posPlayer.x = m_boundRight;
+	}
 	crtAnimation->Set2DPosition(posPlayer.x, posPlayer.y);
 	crtAnimation->Update(deltaTime);
 }
@@ -121,7 +129,7 @@ void Player::Set2DPosition(float x, float y)
 
 Vector2 Player::Get2DPosition()
 {
-	return Vector2(m_playerPos.x, m_playerPos.y);
+	return crtAnimation->Get2DPosition();
 }
 
 int Player::GetWidth()

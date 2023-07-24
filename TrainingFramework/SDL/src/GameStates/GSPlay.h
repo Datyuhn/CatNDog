@@ -33,7 +33,7 @@ public:
 	SDL_Rect p_char1, p_char2, item;
 
 private:
-	std::shared_ptr<Sprite2D>						m_background, frm, floor;
+	std::shared_ptr<Sprite2D>						m_background, frm, floor, wall;
 
 	std::vector<std::shared_ptr<Player>>			m_listCharacter;
 	std::shared_ptr<Player>							p1, p2;
