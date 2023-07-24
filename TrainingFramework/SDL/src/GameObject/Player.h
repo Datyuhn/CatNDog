@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseObject.h"
-#include "GameStateBase.h"
+//#include "GameStateBase.h"
 #include "SDL_scancode.h"
 #include <vector>
 #include <string>
@@ -10,57 +10,40 @@ class Sprite2D;
 class SpriteAnimation;
 class TextureManager;
 
-class Player : public BaseObject, GameStateBase
+class Player
 {
 protected:
-	int m_iWidth;
-	int m_iHeight;
 	int m_playerID;
-	
-	float	m_numFrames;
-	int		m_currentFrame;
-	float	m_frameTime;
-	float	m_currentTime;
-
-	int		m_spriteRow;
-	int		m_frameCount;
-	float	m_currentTicks;
-	int		m_animSpeed;
-	int		m_numAction;
-
-	Uint32	m_lastUpdate;
-	SDL_RendererFlip m_flip;
 	std::string text;
 	std::vector<SDL_Scancode> p_controlKey;
-
+	Vector2 m_playerPos;
 public:
-	Player() : BaseObject(), m_iWidth(0), m_iHeight(0), g_point(0), m_playerID(player_id) {}
-	Player(int playerID, std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float frameTime, SDL_RendererFlip flip);
+	Player() {}
+	Player(int playerID);
 	~Player();
 
-	void	Init() override;
-	void	Draw(SDL_Renderer* renderer) override;
-	void	Update(float deltatime) override;
+	void	Init();
+	void	Draw(SDL_Renderer* renderer);
+	void	Update(float deltatime);
 
 	void	SetControl(const std::vector<SDL_Scancode>& p_control);
-	void	HandleKeyEvents(SDL_Event& e) override;
+	void	HandleKeyEvents(SDL_Event& e);
 
 	void	Set2DPosition(float x, float y);
-	void	SetSize(int width, int height);
-	void	SetRotation(double angle);
-	void	SetFlip(SDL_RendererFlip flip);
-	
-	Vector2	Get2DPosition();
 	int		GetWidth();
 	int		GetHeight();
+
+	//void  MoveLeft(float deltaTime);
+	Vector2	Get2DPosition();
 	int		GetPoint(int g_point);
 
 private:
 	std::vector<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
 	std::shared_ptr<SpriteAnimation>				crtAnimation;
-	
+	std::shared_ptr<SpriteAnimation>				IdleAnimation;
+	std::shared_ptr<SpriteAnimation>				eatAnimation;
+
 	Vector2	MoveDirection;
-	//std::string text1, text2;
 	int player_id;
 	int g_point;
 	int m_KeyPress;

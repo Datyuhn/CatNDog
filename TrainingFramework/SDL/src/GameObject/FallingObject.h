@@ -9,6 +9,9 @@ protected:
 	int     m_iWidth;
 	int     m_iHeight;
 	SDL_RendererFlip m_flip;
+
+	std::list<std::shared_ptr<FallingObject>>		m_listFood;
+	std::shared_ptr<FallingObject>					food;
 	//float   velocityY;
 
 public:

@@ -17,7 +17,7 @@ void GSPlay::Init()
 {
 	// auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bgr_09_p1.jpg");
-	
+
 	/// Buttons
 	{
 		// background
@@ -30,9 +30,18 @@ void GSPlay::Init()
 		floor->SetSize(SCREEN_WIDTH, 150);
 		floor->Set2DPosition(-5, SCREEN_HEIDHT - floor->GetHeight() + 60);
 
-		m_score = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
-		m_score->SetSize(40, 40);
-		m_score->Set2DPosition(30, 30);
+		// score
+		m_score1 = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
+		m_score1->SetSize(40, 40);
+		m_score1->Set2DPosition(30, 30);
+		m_listScore.push_back(m_score1);
+
+		m_score2 = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
+		m_score2->SetSize(40, 40);
+		m_score2->Set2DPosition(SCREEN_WIDTH / 2 + 30, 30);
+		m_listScore.push_back(m_score2);
+
+
 		// how to play button
 		/*
 		texture = ResourceManagers::GetInstance()->GetTexture("mBtn_yel.png");
@@ -93,22 +102,17 @@ void GSPlay::Init()
 			isPaused = true;
 			});
 	}
-    // Character 1
+
+	// Character 1
 	texture = ResourceManagers::GetInstance()->GetTexture("normal19_1.png");
-	p1 = std::make_shared<Player>(1, texture, 1, 19, 1, 0.04f);
-	p1->SetFlip(SDL_FLIP_HORIZONTAL);
-	p1->SetSize(150, 144);
-	p1->Set2DPosition((SCREEN_WIDTH - p1->GetWidth()/2) / 4, SCREEN_HEIDHT - p1->GetHeight() - 20);
+	p1 = std::make_shared<Player>(1);
 	p1->SetControl({ SDL_SCANCODE_A, SDL_SCANCODE_D });
 	m_listCharacter.push_back(p1);
 
 	// Character 2
 	texture = ResourceManagers::GetInstance()->GetTexture("normal19_2.png");
-	p2 = std::make_shared<Player>(texture, 1, 19, 1, 0.04f);
-	p2->SetFlip(SDL_FLIP_HORIZONTAL);
-	p2->SetSize(150, 144);
-	p2->Set2DPosition((SCREEN_WIDTH - p2->GetWidth() / 2) * 3/4, SCREEN_HEIDHT - p2->GetHeight() - 20);
-	p1->SetControl({ SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT });
+	p2 = std::make_shared<Player>(2);
+	p2->SetControl({ SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT });
 	m_listCharacter.push_back(p2);
 
 	// Foods
@@ -118,14 +122,9 @@ void GSPlay::Init()
 	food->Set2DPosition(260, food->GetHeight() * -1);
 	m_listFood.push_back(food);
 
-	//obj = m_listAnimation[0];
 	m_KeyPress = 0;
-
-	/*for (int i = 0; i < 10; i++) {
-		SpawnFood();
-	}*/
-	g_point_1 = 0;
-	g_point_2 = 0;
+	g_point1 = 0;
+	g_point2 = 0;
 }
 
 void GSPlay::SpawnFood()
@@ -135,7 +134,7 @@ void GSPlay::SpawnFood()
 
 void GSPlay::Exit()
 {
-	
+
 }
 
 void GSPlay::Pause()
@@ -145,7 +144,7 @@ void GSPlay::Pause()
 
 void GSPlay::Resume()
 {
-	
+
 }
 
 void GSPlay::HandleEvents()
@@ -179,15 +178,50 @@ void GSPlay::Update(float deltaTime)
 {
 	MoveDirection.y = 1;
 
-	
 	Vector2 crtFoodPosition = food->Get2DPosition();
+	Vector2 crtPos1 = p1->Get2DPosition();
+	Vector2 crtPos2 = p2->Get2DPosition();
+
 	food->Set2DPosition(crtFoodPosition.x, crtFoodPosition.y + MoveDirection.y * deltaTime * m_VelocityY);
 
+	p_char1 = { (int)crtPos1.x + 70, (int)crtPos1.y + 75, p1->GetWidth() - 110, p1->GetHeight() - 130 };
+	p_char2 = { (int)crtPos2.x + 70, (int)crtPos1.y + 75, p2->GetWidth() - 110, p2->GetHeight() - 130 };
+	item = { (int)crtFoodPosition.x + 10, (int)crtFoodPosition.y + 20, food->GetWidth() - 20, food->GetHeight() - 35 };
+
 	if (!isPaused) {
+		for (auto food : m_listFood) {
+			food->Update(deltaTime);
+			if (Collision::checkCollision(p_char1, item)) {
+				g_point1++;
+				SpawnFood();
+			}
+			if (Collision::checkCollision(p_char2, item)) {
+				g_point2++;
+				SpawnFood();
+			}
+		}
+		for (auto food : m_listFood) {
+			food->Update(deltaTime);
+			if (food->Get2DPosition().y > SCREEN_HEIDHT) {
+				SpawnFood();
+			}
+		}
+		
+		std::string str1 = std::to_string(g_point1);
+		m_score1->LoadFromRenderText(str1);
+
+		std::string str2 = std::to_string(g_point2);
+		m_score2->LoadFromRenderText(str2);
+
+		for (auto it : m_listScore) {
+			it->Update(deltaTime);
+		}
 		p1->Update(deltaTime);
 		p2->Update(deltaTime);
 	}
+	else {
 
+	}
 	//Update position of camera
 	//Camera::GetInstance()->Update(deltaTime);
 	//obj->Update(deltaTime);
@@ -206,8 +240,10 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	for (auto food : m_listFood) {
 		food->Draw(renderer);
 	}
-	m_score->Draw(renderer);
-
+	for (auto it : m_listScore)
+	{
+		it->Draw(renderer);
+	}
 	if (isPaused)
 	{
 		SDL_Rect rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIDHT };
@@ -220,5 +256,6 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 		{
 			it->Draw(renderer);
 		}
-	} else btnPause->Draw(renderer);
+	}
+	else btnPause->Draw(renderer);
 }

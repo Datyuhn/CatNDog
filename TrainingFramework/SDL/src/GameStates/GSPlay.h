@@ -2,6 +2,7 @@
 #include "GameStateBase.h"
 #include "GameObject/MouseButton.h"
 #include "GameObject/Text.h"
+#include <vector>
 
 class Sprite2D;
 class Player;
@@ -29,7 +30,7 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 	int		m_KeyPress;
-	SDL_Rect character, item;
+	SDL_Rect p_char1, p_char2, item;
 
 private:
 	std::shared_ptr<Sprite2D>						m_background, frm, floor;
@@ -37,7 +38,9 @@ private:
 	std::vector<std::shared_ptr<Player>>			m_listCharacter;
 	std::shared_ptr<Player>							p1, p2;
 
-	std::shared_ptr<Text>							m_score;
+	std::shared_ptr<Text>							m_score1, m_score2;
+	std::vector<std::shared_ptr<Text>>				m_listScore;
+
 	std::list<std::shared_ptr<MouseButton>>			m_listButton;
 	std::shared_ptr<MouseButton>					button, btnPause;
 
@@ -49,13 +52,14 @@ private:
 	
 	Vector2	MoveDirection;
 	SDL_Color m_scoreColor = {255, 255, 255, 255};
+	std::vector<SDL_Scancode> p_controlKey;
+
 
 	float time = 0.0f;
 	float m_VelocityX = 600.0f;
-	float m_VelocityY = 250.0f;
-
+	float m_VelocityY = 350.0f;
 	bool isPaused = false;
 	bool isActive = true;
-	int	 g_point_1, g_point_2;
+	int	 g_point1, g_point2;
 };
 

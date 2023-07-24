@@ -22,9 +22,6 @@ protected:
 	int		m_animSpeed;
 	int		m_numAction;
 
-	/*std::vector<std::shared_ptr<SpriteAnimation>> p_skin;
-	std::shared_ptr<SpriteAnimation>				obj;*/
-
 	//SDL_RendererFlip m_flip;
 	//std::shared_ptr<TextureManager> m_texture;
 
