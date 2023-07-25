@@ -6,6 +6,7 @@
 #include <vector>
 #include "ResourceManagers.h"
 #include "Define.h"
+
 Player::Player(int playerID, int boundLeft, int boundRight)
 {
 	m_playerID = playerID;
@@ -119,11 +120,6 @@ void Player::Set2DPosition(float x, float y)
 {
 	m_playerPos = Vector2((float)x, (float)y);
 }
-
-//void Player::MoveLeft(float deltaTime)
-//{
-//	m_playerPos.x += 200 * deltaTime;
-//}
 
 Vector2 Player::Get2DPosition()
 {

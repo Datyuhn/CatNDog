@@ -1,41 +1,60 @@
 #include "FallingObject.h"
 #include "TextureManager.h"
 #include "ResourceManagers.h"
+#include "Sprite2D.h"
+#include "Define.h"
 
-
-FallingObject::FallingObject(std::shared_ptr<TextureManager> texture, SDL_RendererFlip flip)
-	:BaseObject(texture), m_iWidth(100), m_iHeight(50)
+FallingObject::FallingObject(int f_speed, int foodID)
 {
-	m_flip = flip;
+	m_iHeight = 60;
+	m_iWidth = 60;
+	m_speed = f_speed;
+	m_foodID = foodID;
 	Init();
 }
 
 FallingObject::~FallingObject() {}
 
-void FallingObject::Init() {
-
+void FallingObject::Init()
+{
+	std::string text = "Items/shadow_" + std::to_string(m_foodID) + ".png";
+	auto texture = ResourceManagers::GetInstance()->GetTexture(text);
+	food = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	food->SetSize(60, 60);
+	food->Set2DPosition(rand() % SCREEN_WIDTH, -food->GetHeight());
+	//m_listFood.push_back(food);
 }
 
 void FallingObject::Draw(SDL_Renderer* renderer)
 {
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture->Render(m_position.x, m_position.y, m_iWidth, m_iHeight, m_angle, m_flip);
-	}
-	SDL_Rect collider = { (int)m_position.x + 10, (int)m_position.y + 20, m_iWidth - 20, m_iHeight - 35 };
+	food->Draw(renderer);
+	/*SDL_Rect collider = { (int)m_position.x + 10, (int)m_position.y + 20, m_iWidth - 20, m_iHeight - 35 };
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 150);
-	SDL_RenderDrawRect(renderer, &collider);
+	SDL_RenderDrawRect(renderer, &collider);*/
 }
 
-void FallingObject::Update(float deltatime) {
-
+void FallingObject::Update(float deltatime)
+{
+	
+	if (m_isActive) {
+		Vector2 foodPos = food->Get2DPosition();
+		foodPos.y += m_speed * deltatime;
+		food->Set2DPosition(foodPos.x, foodPos.y);
+		food->Update(deltatime);
+	}
+	else {
+		food->Set2DPosition(SCREEN_WIDTH + 10, SCREEN_HEIDHT + 10);
+		food->Update(deltatime);
+	}
+	/*for (auto food : m_listFood) {
+		food->Update(deltatime);
+	}*/
 }
 
 void FallingObject::SetSize(int width, int height)
 {
 	m_iWidth = width;
 	m_iHeight = height;
-	m_scale = Vector3((float)m_iWidth, (float)m_iHeight, 0.0f);
 }
 
 void FallingObject::Spawn(int ramdom_x, int ramdom_y)
@@ -45,37 +64,48 @@ void FallingObject::Spawn(int ramdom_x, int ramdom_y)
 	this->Set2DPosition(randomX, randomY);
 }
 
+void FallingObject::SetActive(bool active) {
+	m_isActive = active;
+}
+
+bool FallingObject::IsActive() {
+	return m_isActive;
+}
+
+int FallingObject::GetFoodID() {
+	return m_foodID;
+}
+int FallingObject::GetFallingSpeed(int m_foodID) {
+	switch (m_foodID) {
+	case 0:
+		return 200;
+		break;
+	case 1:
+		return 300;
+	case 2:
+		return 400;
+	default:
+		break;
+	}
+}
+
 void FallingObject::Set2DPosition(float x, float y)
 {
-	m_position = Vector3((float)x, (float)y, 0.0f);
+	m_foodPos = Vector2((float)x, (float)y);
 }
 
 Vector2 FallingObject::Get2DPosition()
 {
-	return Vector2(m_position.x, m_position.y);
-
+	return food->Get2DPosition();
 }
-
-void FallingObject::SetRotation(double angle)
-{
-}
-
-void FallingObject::SetFlip(SDL_RendererFlip flip)
-{
-}
-
-void FallingObject::SetVelocityY(float velocity)
-{
-}
-
 
 int FallingObject::GetWidth()
 {
-	return m_iWidth;
+	return food->GetWidth();
 }
 
 int FallingObject::GetHeight()
 {
-	return m_iHeight;
+	return food->GetHeight();
 }
 

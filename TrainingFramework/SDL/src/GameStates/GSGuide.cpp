@@ -21,9 +21,9 @@ void GSGuide::Init()
 	m_background->Set2DPosition(0, 0);
 
 	//guide frame
-	texture = ResourceManagers::GetInstance()->GetTexture("frame-wood.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("control_htp.png");
 	guideFrm = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
-	guideFrm->SetSize(868, 646);
+	guideFrm->SetSize(746, 726);
 	guideFrm->Set2DPosition((SCREEN_WIDTH - guideFrm->GetWidth()) / 2, (SCREEN_HEIDHT - guideFrm->GetHeight()) / 2);
 
 	// exit button

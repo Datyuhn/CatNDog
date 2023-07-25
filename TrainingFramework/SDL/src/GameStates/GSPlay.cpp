@@ -17,7 +17,7 @@ GSPlay::~GSPlay() {}
 void GSPlay::Init()
 {
 	// auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bgr_09_p1.jpg");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bgcandy.jpg");
 
 	// background
 	m_background = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
@@ -104,7 +104,7 @@ void GSPlay::Init()
 		m_listButton.push_back(button);
 
 		// Pause frame
-		auto b_pause = ResourceManagers::GetInstance()->GetTexture("frame-wood.png");
+		auto b_pause = ResourceManagers::GetInstance()->GetTexture("pause_frame.png");
 		frm = std::make_shared<Sprite2D>(b_pause, SDL_FLIP_NONE);
 		frm->SetSize(694, 516);
 		frm->Set2DPosition((SCREEN_WIDTH - frm->GetWidth()) / 2, (SCREEN_HEIDHT - frm->GetHeight()) / 2);
@@ -132,17 +132,14 @@ void GSPlay::Init()
 	m_listCharacter.push_back(p2);
 
 	// Foods
-	texture = ResourceManagers::GetInstance()->GetTexture("Items/Piece-of-cake_shadow.png");
-	food = std::make_shared<FallingObject>(texture, SDL_FLIP_NONE);
-	food->SetSize(60, 60);
-	food->Set2DPosition(260, food->GetHeight() * -1);
+	//texture = ResourceManagers::GetInstance()->GetTexture("Items/shadow_0.png");
+	food = std::make_shared<FallingObject>(200, 0);
+	food->SetActive(true);
 	m_listFood.push_back(food);
 
-	texture = ResourceManagers::GetInstance()->GetTexture("Items/Cupcake_shadow.png");
-	food = std::make_shared<FallingObject>(texture, SDL_FLIP_NONE);
-	food->SetSize(60, 60);
-	food->Set2DPosition(260, food->GetHeight() * -1);
-	m_listFood.push_back(food);
+	//texture = ResourceManagers::GetInstance()->GetTexture("Items/shadow_1.png");
+	//food = std::make_shared<FallingObject>(400, 1);
+	//m_listFood.push_back(food);
 
 	m_KeyPress = 0;
 	g_point1 = 0;
@@ -152,15 +149,19 @@ void GSPlay::Init()
 		g_timer.Start();
 	}
 	g_timer.SetDuration(3000);
-	food_timer.SetDuration(500);
+	food_timer.SetDuration(1400);
 	food_timer.Start();
 }
 
 void GSPlay::SpawnFood()
 {
-	int index = rand() % m_listFood.size();
-	food = m_listFood[index];
-	food->Spawn(SCREEN_WIDTH - food->GetWidth(), -food->GetHeight());
+	int index = rand() % 3;
+	int f_speed = food->GetFallingSpeed(index);
+	food = std::make_shared<FallingObject>(f_speed, index);
+
+	food->SetActive(true);
+	m_listFood.push_back(food);
+	food->Spawn(SCREEN_WIDTH - food->GetWidth() - 10, food->GetHeight());
 }
 
 void GSPlay::Exit()
@@ -207,17 +208,13 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 
 void GSPlay::Update(float deltaTime)
 {
-	MoveDirection.y = 1;
-
 	Vector2 crtFoodPosition = food->Get2DPosition();
 	Vector2 crtPos1 = p1->Get2DPosition();
 	Vector2 crtPos2 = p2->Get2DPosition();
 
-	food->Set2DPosition(crtFoodPosition.x, crtFoodPosition.y + MoveDirection.y * deltaTime * m_VelocityY);
-
 	p_char1 = { (int)crtPos1.x + 70, (int)crtPos1.y + 75, p1->GetWidth() - 110, p1->GetHeight() - 130 };
 	p_char2 = { (int)crtPos2.x + 70, (int)crtPos1.y + 75, p2->GetWidth() - 110, p2->GetHeight() - 130 };
-	item = { (int)crtFoodPosition.x + 20, (int)crtFoodPosition.y +30, food->GetWidth() - 20, food->GetHeight() - 35 };
+	item    = { (int)crtFoodPosition.x + 20, (int)crtFoodPosition.y + 30, food->GetWidth() - 20, food->GetHeight() - 35 };
 
 	/*Uint32 countTime = g_timer.GetTicks();
 	if (countTime >= g_timer.GetDuration()) 
@@ -228,21 +225,22 @@ void GSPlay::Update(float deltaTime)
 	}*/	
 
 	if (!isPaused) {
-		if (Collision::checkCollision(p_char1, item)) {
+		if (food->IsActive() && Collision::checkCollision(p_char1, item)) {
 			g_point1++;
+			food->SetActive(false);
 		}
-		if (Collision::checkCollision(p_char2, item)) {
+		if (food->IsActive() && Collision::checkCollision(p_char2, item)) {
 			g_point2++;
+			food->SetActive(false);
 		}
-
-		if (food_timer.GetTicks() >= food_timer.GetDuration()) { 
+		
+		
+		food->Update(deltaTime);
+		if (food_timer.GetTicks() >= food_timer.GetDuration()) {
 			SpawnFood();
 			food_timer.Start();
 		}
-
-		for (auto food : m_listFood) {
-			food->Update(deltaTime);
-		}
+		
 
 		std::string str1 = "Score:" + std::to_string(g_point1);
 		m_score1->LoadFromRenderText(str1);
@@ -281,6 +279,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	}
 
 	for (auto food : m_listFood) {
+		if (food->IsActive())
 		food->Draw(renderer);
 	}
 	for (auto it : m_listScore)

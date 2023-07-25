@@ -1,34 +1,45 @@
 #pragma once
 #include "BaseObject.h"
 #include "SDL_render.h"
+#include <vector>
 
-class FallingObject : public BaseObject
+class Sprite2D;
+class TextureManager;
+
+class FallingObject
 {
 protected:
-	//Vector2 m_Vec2DPos;
-	int     m_iWidth;
-	int     m_iHeight;
-	SDL_RendererFlip m_flip;
+	int m_iWidth;
+	int m_iHeight;
+	int	m_speed;
+	int m_playerId;
+	int m_foodID;
+	bool m_isActive;
+	Vector2 m_foodPos;
+
+	std::shared_ptr<Sprite2D>				food;
+	std::vector<std::shared_ptr<Sprite2D>>	m_listFood;
+	std::vector<std::shared_ptr<Sprite2D>>	arr;
 
 	//float   velocityY;
 
 public:
-	FallingObject() : BaseObject(), m_iWidth(0), m_iHeight(0) {}
-	FallingObject(std::shared_ptr<TextureManager> texture, SDL_RendererFlip flip);
+	FallingObject() {};
+	FallingObject(int f_speed, int foodID);
 	~FallingObject();
 
-	void Init() override;
-	void Draw(SDL_Renderer* renderer) override;
-	void Update(float deltatime) override;
+	void Init();
+	void Draw(SDL_Renderer* renderer);
+	void Update(float deltatime);
 
 	void Spawn(int ramdom_x, int ramdom_y);
+	void SetActive(bool active);
+	bool IsActive();
+	int GetFoodID();
+	int GetFallingSpeed(int m_foodID);
+
 	void SetSize(int width, int height);
 	void Set2DPosition(float x, float y);
-
-	void SetRotation(double angle);
-	void SetFlip(SDL_RendererFlip flip);
-	void SetVelocityY(float velocity);
-
 	Vector2	Get2DPosition();
 	int		GetWidth();
 	int		GetHeight();

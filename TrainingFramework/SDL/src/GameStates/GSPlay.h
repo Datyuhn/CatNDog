@@ -54,7 +54,6 @@ private:
 	
 	Timer g_timer, t_duration, food_timer;
 	
-	Vector2	MoveDirection;
 	SDL_Color m_scoreColor = {255, 255, 255, 255};
 	std::vector<SDL_Scancode> p_controlKey;
 
