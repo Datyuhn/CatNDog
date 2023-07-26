@@ -27,11 +27,11 @@ void GSOption::Init()
 	frm->Set2DPosition((SCREEN_WIDTH - frm->GetWidth()) / 2, (SCREEN_HEIDHT - frm->GetHeight()) / 2);
 
 	// exit button
-	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");
+	texture = ResourceManagers::GetInstance()->GetTexture("x.png");
 	std::shared_ptr<MouseButton> btnClose = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	//btnClose = std::make_shared<MouseButton>(texture);
-	btnClose->SetSize(80, 80);
-	btnClose->Set2DPosition(SCREEN_WIDTH - 90, 10);
+	btnClose->SetSize(352 / 5, 372 / 5);
+	btnClose->Set2DPosition((SCREEN_WIDTH - btnClose->GetWidth()) / 2, (SCREEN_HEIDHT - btnClose->GetHeight()) / 2 + 180);
 	btnClose->SetOnClick([]() {
 		GameStateMachine::GetInstance()->PopState();
 		});
@@ -96,10 +96,9 @@ void GSOption::Update(float deltaTime)
 void GSOption::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
+	frm->Draw(renderer);
 	for (auto it : m_listButton)
 	{
 		it->Draw(renderer);
 	}
-	frm->Draw(renderer);
-	//m_textGameName->Draw(renderer);
 }

@@ -153,9 +153,12 @@ void GSPlay::Init()
 	if (!g_timer.IsStarted()) {
 		g_timer.Start();
 	}
-	g_timer.SetDuration(700);
+	g_timer.SetDuration(800);
 	food_timer.SetDuration(600);
+	t_duration.SetDuration(90700);
+
 	food_timer.Start();
+	t_duration.Start();
 	inTime = false;
 }
 
@@ -229,21 +232,21 @@ void GSPlay::Update(float deltaTime)
 	p_near1 = { (int)crtPos1.x + 40, (int)crtPos1.y + 5, p1->GetWidth() - 50, p1->GetHeight() - 60 };
 	p_near2 = { (int)crtPos2.x + 40, (int)crtPos2.y + 5, p2->GetWidth() - 50, p2->GetHeight() - 60 };
 
-	p_char1 = { (int)crtPos1.x + 60, (int)crtPos1.y + 80, p1->GetWidth() - 90, p1->GetHeight() - 120 };
-	p_char2 = { (int)crtPos2.x + 60, (int)crtPos1.y + 80, p2->GetWidth() - 90, p2->GetHeight() - 120 };
+	p_char1 = { (int)crtPos1.x + 50, (int)crtPos1.y + 80, p1->GetWidth() - 70, p1->GetHeight() - 120 };
+	p_char2 = { (int)crtPos2.x + 50, (int)crtPos1.y + 80, p2->GetWidth() - 70, p2->GetHeight() - 120 };
 
-	Uint32 countTime = g_timer.GetTicks();
-	if (countTime >= g_timer.GetDuration()) 
+	Uint32 countdown = g_timer.GetTicks();
+	if (countdown >= g_timer.GetDuration())
 	{
-		t_duration.SetDuration(120000);
-	 	inTime = true;
-	 	t_duration.Start();
-		temp = t_duration.GetDuration();
+	 	//inTime = true;
+		Stop();
+	 	//t_duration.Start();
+		//temp = t_duration.GetDuration();
 	}
 
-	if (!isPaused) 
+	if (!isPaused)
 	{
-		if (g_timer.GetTicks() >= g_timer.GetDuration())
+		if (countdown >= g_timer.GetDuration())
 		{
 			inTime = true;
 			//temp = t_duration.GetDuration();
@@ -275,7 +278,6 @@ void GSPlay::Update(float deltaTime)
 					}
 					//p2->ChangeAnimation();
 					food->SetActive(false);
-
 				}
 			}
 
@@ -294,11 +296,10 @@ void GSPlay::Update(float deltaTime)
 				isPaused = true;
 			}
 			else {
-				//printf("%d\n",t_duration.GetTicks());
-				/*int time = (t_duration.GetDuration() - t_duration.GetTicks()) / 1000;
-				std::string str3 = std::to_string(time);
+				temp = t_duration.GetDuration() - t_duration.GetTicks();
+				std::string str3 = std::to_string(temp / 1000);
 				m_time->LoadFromRenderText(str3);
-				m_time->Update(deltaTime);*/
+				m_time->Update(deltaTime);
 			}
 
 			p1->Update(deltaTime);
@@ -312,6 +313,8 @@ void GSPlay::Update(float deltaTime)
 	else {
 		inTime = false;
 		g_timer.Start();
+		t_duration.SetDuration(temp);
+		t_duration.Start();
 	}
 	//Update position of camera
 	//Camera::GetInstance()->Update(deltaTime);

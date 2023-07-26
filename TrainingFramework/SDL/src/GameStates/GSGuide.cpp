@@ -27,11 +27,11 @@ void GSGuide::Init()
 	guideFrm->Set2DPosition((SCREEN_WIDTH - guideFrm->GetWidth()) / 2, (SCREEN_HEIDHT - guideFrm->GetHeight()) / 2);
 
 	// exit button
-	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");
+	texture = ResourceManagers::GetInstance()->GetTexture("x.png");
 	std::shared_ptr<MouseButton> btnClose = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	//btnClose = std::make_shared<MouseButton>(texture);
-	btnClose->SetSize(80, 80);
-	btnClose->Set2DPosition(SCREEN_WIDTH - 90, 10);
+	btnClose->SetSize(352 / 5, 372 / 5);
+	btnClose->Set2DPosition((SCREEN_WIDTH - btnClose->GetWidth()) / 2, (SCREEN_HEIDHT - btnClose->GetHeight()) / 2 + 205);
 	btnClose->SetOnClick([]() {
 		GameStateMachine::GetInstance()->PopState();
 		});
@@ -95,10 +95,10 @@ void GSGuide::Update(float deltaTime)
 void GSGuide::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
+	guideFrm->Draw(renderer);
+
 	for (auto it : m_listButton)
 	{
 		it->Draw(renderer);
 	}
-	guideFrm->Draw(renderer);
-	//m_textGameName->Draw(renderer);
 }

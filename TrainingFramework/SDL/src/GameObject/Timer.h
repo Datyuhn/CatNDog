@@ -18,9 +18,10 @@ public:
 	//Checks the status of the timer
 	bool IsStarted();
 	bool IsPaused();
-private:
+
 	//Duration time
 	Uint32 mDuration;
+private:
 	//The clock time when the timer started
 	Uint32 mStartTicks;
 	//The ticks stored when the timer was paused
