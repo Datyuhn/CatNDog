@@ -47,6 +47,12 @@ void GSPlay::Init()
 	m_score2->Set2DPosition((SCREEN_WIDTH - m_score1->GetWidth() / 4) * 3 / 4, 30);
 	m_listScore.push_back(m_score2);
 
+	// Time
+	m_time = std::make_shared<Text>("Data/BADABB__.TTF", m_scoreColor);
+	m_time->SetSize(60, 40);
+	m_time->Set2DPosition((SCREEN_WIDTH - m_time->GetWidth()) / 2, 30);
+	m_listScore.push_back(m_time);
+
 	///Button
 	{
 		// resume button
@@ -205,42 +211,49 @@ void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 void GSPlay::HandleMouseMoveEvents(int x, int y)
 {
 }
+void Stop() {}
 
 void GSPlay::Update(float deltaTime)
 {
-	Vector2 crtFoodPosition = food->Get2DPosition();
 	Vector2 crtPos1 = p1->Get2DPosition();
 	Vector2 crtPos2 = p2->Get2DPosition();
 
 	p_char1 = { (int)crtPos1.x + 70, (int)crtPos1.y + 75, p1->GetWidth() - 110, p1->GetHeight() - 130 };
 	p_char2 = { (int)crtPos2.x + 70, (int)crtPos1.y + 75, p2->GetWidth() - 110, p2->GetHeight() - 130 };
-	item    = { (int)crtFoodPosition.x + 20, (int)crtFoodPosition.y + 30, food->GetWidth() - 20, food->GetHeight() - 35 };
 
-	/*Uint32 countTime = g_timer.GetTicks();
+	Uint32 countTime = g_timer.GetTicks();
 	if (countTime >= g_timer.GetDuration()) 
 	{ 
 		t_duration.SetDuration(120000);
 	 	inTime = true;
 	 	t_duration.Start();
-	}*/	
+		temp = t_duration.GetDuration();
 
-	if (!isPaused) {
-		if (food->IsActive() && Collision::checkCollision(p_char1, item)) {
-			g_point1++;
-			food->SetActive(false);
+	}
+
+	if (!isPaused && inTime) 
+	{	
+		for (auto it : m_listFood) {
+			it->Update(deltaTime);
 		}
-		if (food->IsActive() && Collision::checkCollision(p_char2, item)) {
-			g_point2++;
-			food->SetActive(false);
+		for (auto food : m_listFood) {
+			Vector2 crtFoodPosition = food->Get2DPosition();
+			item = { (int)crtFoodPosition.x + 20, (int)crtFoodPosition.y + 30, food->GetWidth() - 20, food->GetHeight() - 35 };
+			if (food->IsActive() && Collision::checkCollision(p_char1, item)) {
+				Stop();
+				g_point1++;
+				food->SetActive(false);
+			}
+			else if (food->IsActive() && Collision::checkCollision(p_char2, item)) {
+				g_point2++;
+				food->SetActive(false);
+			}
 		}
-		
-		
-		food->Update(deltaTime);
+
 		if (food_timer.GetTicks() >= food_timer.GetDuration()) {
 			SpawnFood();
 			food_timer.Start();
 		}
-		
 
 		std::string str1 = "Score:" + std::to_string(g_point1);
 		m_score1->LoadFromRenderText(str1);
@@ -250,6 +263,14 @@ void GSPlay::Update(float deltaTime)
 		if (t_duration.GetTicks() >= t_duration.GetDuration())
 		{
 			isPaused = true;
+		}
+		else {
+			printf("%d\n",t_duration.GetTicks());
+			int time = (t_duration.GetDuration() - t_duration.GetTicks()) / 1000;
+			std::string str3 = std::to_string(time);
+			m_time->LoadFromRenderText(str3);
+			m_time->Update(deltaTime);
+			
 		}
 		
 		for (auto it : m_listScore) {
@@ -286,6 +307,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	{
 		it->Draw(renderer);
 	}
+	m_time->Draw(renderer);
 	if (isPaused)
 	{
 		SDL_Rect rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIDHT };

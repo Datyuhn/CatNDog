@@ -78,12 +78,14 @@ int FallingObject::GetFoodID() {
 int FallingObject::GetFallingSpeed(int m_foodID) {
 	switch (m_foodID) {
 	case 0:
-		return 200;
+		return 250;
 		break;
 	case 1:
-		return 300;
+		return 350;
+		break;
 	case 2:
-		return 400;
+		return 450;
+		break;
 	default:
 		break;
 	}

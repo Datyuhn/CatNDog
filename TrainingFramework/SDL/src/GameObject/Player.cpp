@@ -6,6 +6,7 @@
 #include <vector>
 #include "ResourceManagers.h"
 #include "Define.h"
+#include "Collision.h"
 
 Player::Player(int playerID, int boundLeft, int boundRight)
 {
@@ -93,6 +94,12 @@ void Player::HandleKeyEvents(SDL_Event& e)
 			m_KeyPress ^= 1 << 2;
 		}
 	}
+}
+
+bool Player::CheckCollision(SDL_Rect& x, SDL_Rect& y)
+{
+	if (Collision::checkCollision(x, y)) return true;
+	return false;
 }
 
 void Player::Update(float deltaTime)

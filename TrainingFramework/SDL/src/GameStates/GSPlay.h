@@ -33,6 +33,7 @@ public:
 	void	Draw(SDL_Renderer* renderer) override;
 	int		m_KeyPress;
 	SDL_Rect p_char1, p_char2, item;
+	int		temp;
 
 private:
 	std::shared_ptr<Sprite2D>						m_background, frm, floor, wall;
@@ -41,6 +42,7 @@ private:
 	std::shared_ptr<Player>							p1, p2;
 
 	std::shared_ptr<Text>							m_score1, m_score2;
+	std::shared_ptr<Text>							m_time;
 	std::vector<std::shared_ptr<Text>>				m_listScore;
 
 	std::list<std::shared_ptr<MouseButton>>			m_listButton;

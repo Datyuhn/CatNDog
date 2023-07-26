@@ -18,6 +18,7 @@ protected:
 	std::string text;
 	std::vector<SDL_Scancode> p_controlKey;
 	Vector2 m_playerPos;
+	SDL_Rect character;
 public:
 	Player() {}
 	Player(int playerID, int boundLeft, int boundRight);
@@ -29,12 +30,12 @@ public:
 
 	void	SetControl(const std::vector<SDL_Scancode>& p_control);
 	void	HandleKeyEvents(SDL_Event& e);
+	bool	CheckCollision(SDL_Rect& x, SDL_Rect& y);
 
 	void	Set2DPosition(float x, float y);
 	int		GetWidth();
 	int		GetHeight();
 
-	//void  MoveLeft(float deltaTime);
 	Vector2	Get2DPosition();
 	int		GetPoint(int g_point);
 
@@ -44,7 +45,7 @@ private:
 	std::shared_ptr<SpriteAnimation>				IdleAnimation;
 	std::shared_ptr<SpriteAnimation>				eatAnimation;
 
-	Vector2	MoveDirection;
+	//Vector2	MoveDirection;
 	int player_id;
 	int g_point;
 	int m_KeyPress;
