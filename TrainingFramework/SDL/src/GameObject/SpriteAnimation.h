@@ -1,10 +1,11 @@
 #pragma once
 #include "BaseObject.h"
 #include <SDL_render.h>
+#include <functional>
 
 class TextureManager;
 class SpriteAnimation : public BaseObject{
-protected:
+public:
 	Vector2	m_Vec2DPos;
 	int		m_iHeight;
 	int		m_iWidth;
@@ -26,13 +27,13 @@ protected:
 	//std::shared_ptr<TextureManager> m_texture;
 
 public:
+	std::function<void(void)> changeAnimation;
 	SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float  frameTime);
 	~SpriteAnimation();
 
 	void	Init() override;
 	void	Draw(SDL_Renderer* renderer) override;
 	void	Update(float deltatime) override;
-	static bool	Change();
 
 	void	Set2DPosition(float x, float y);
 	void	SetRotation(double angle);

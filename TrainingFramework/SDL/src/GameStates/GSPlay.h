@@ -32,7 +32,7 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 	int		m_KeyPress;
-	SDL_Rect p_char1, p_char2, item;
+	SDL_Rect p_near1, p_near2, p_char1, p_char2, item;
 	int		temp;
 
 private:
@@ -49,7 +49,7 @@ private:
 	std::shared_ptr<MouseButton>					button, btnPause;
 
 	std::vector<std::shared_ptr<FallingObject>>		m_listFood;
-	std::shared_ptr<FallingObject>					food;
+	std::shared_ptr<FallingObject>					food1, food2;
 
 	std::vector<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
 	std::shared_ptr<SpriteAnimation>				obj;

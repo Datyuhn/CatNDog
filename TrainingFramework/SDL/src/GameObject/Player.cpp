@@ -7,6 +7,7 @@
 #include "ResourceManagers.h"
 #include "Define.h"
 #include "Collision.h"
+#include <iostream>
 
 Player::Player(int playerID, int boundLeft, int boundRight)
 {
@@ -25,7 +26,7 @@ void Player::Init()
 	text = "normal19_" + std::to_string(m_playerID) + ".png";
 	auto texture = ResourceManagers::GetInstance()->GetTexture(text);
 
-	crtAnimation = std::make_shared<SpriteAnimation>(texture, 1, 19, 1, 0.04f);
+	crtAnimation = std::make_shared<SpriteAnimation>(texture, 1, 19, 1, 0.045f);
 	crtAnimation->SetFlip(SDL_FLIP_HORIZONTAL);
 	crtAnimation->SetSize(150, 144);
 	if (m_playerID == 1)
@@ -44,17 +45,12 @@ void Player::Init()
 	eatAnimation = std::make_shared<SpriteAnimation>(texture, 1, 21, 1, 0.03f);
 	eatAnimation->SetFlip(SDL_FLIP_HORIZONTAL);
 	eatAnimation->SetSize(150, 144);
-	if (m_playerID == 1)
-	{
-		eatAnimation->Set2DPosition((SCREEN_WIDTH - crtAnimation->GetWidth() / 2) / 4, SCREEN_HEIDHT - crtAnimation->GetHeight() - 20);
-	}
-	else
-	{
-		eatAnimation->Set2DPosition((SCREEN_WIDTH - crtAnimation->GetWidth() / 2) * 3 / 4, SCREEN_HEIDHT - crtAnimation->GetHeight() - 20);
-	}
-	//	eatAnimation->Set2DPosition(SCREEN_WIDTH / 2 - 60, SCREEN_HEIDHT - crtAnimation->GetHeight());
-	IdleAnimation = crtAnimation;
+	eatAnimation->changeAnimation = [=]() mutable {
+		crtAnimation->Set2DPosition(eatAnimation->Get2DPosition().x, eatAnimation->Get2DPosition().y);
+		IdleAnimation = crtAnimation;
+	};
 
+	IdleAnimation = crtAnimation;
 }
 
 void Player::Draw(SDL_Renderer* renderer)
@@ -96,22 +92,36 @@ void Player::HandleKeyEvents(SDL_Event& e)
 	}
 }
 
-bool Player::CheckCollision(SDL_Rect& x, SDL_Rect& y)
+//bool Player::CheckCollision(SDL_Rect& x, SDL_Rect& y)
+//{
+//	if (Collision::checkCollision(x, y)) {
+//		ChangeAnimation();
+//		return true;
+//	}
+//
+//	return false;
+//}
+
+void Player::ChangeAnimation()
 {
-	if (Collision::checkCollision(x, y)) return true;
-	return false;
+	Vector2 pos_animation = IdleAnimation->Get2DPosition();
+
+	if (IdleAnimation == crtAnimation) {
+		eatAnimation->Set2DPosition(pos_animation.x, pos_animation.y);
+		IdleAnimation = eatAnimation;
+	}
 }
 
 void Player::Update(float deltaTime)
 {
-	Vector2 posPlayer = crtAnimation->Get2DPosition();
+	Vector2 posPlayer = IdleAnimation->Get2DPosition();
 	if (m_KeyPress == 1)
 	{
-		posPlayer.x -= 700 * deltaTime;
+		posPlayer.x -= 1000 * deltaTime;
 	}
 	if (m_KeyPress == 4)
 	{
-		posPlayer.x += 700 * deltaTime;
+		posPlayer.x += 1000 * deltaTime;
 	}
 	if (posPlayer.x < m_boundLeft) {
 		posPlayer.x = m_boundLeft;
@@ -119,8 +129,8 @@ void Player::Update(float deltaTime)
 	else if (posPlayer.x > m_boundRight) {
 		posPlayer.x = m_boundRight;
 	}
-	crtAnimation->Set2DPosition(posPlayer.x, posPlayer.y);
-	crtAnimation->Update(deltaTime);
+	IdleAnimation->Set2DPosition(posPlayer.x, posPlayer.y);
+	IdleAnimation->Update(deltaTime);
 }
 
 void Player::Set2DPosition(float x, float y)
@@ -130,22 +140,15 @@ void Player::Set2DPosition(float x, float y)
 
 Vector2 Player::Get2DPosition()
 {
-	return crtAnimation->Get2DPosition();
+	return IdleAnimation->Get2DPosition();
 }
 
 int Player::GetWidth()
 {
-	return crtAnimation->GetWidth();
+	return IdleAnimation->GetWidth();
 }
 
 int Player::GetHeight()
 {
-	return crtAnimation->GetHeight();
+	return IdleAnimation->GetHeight();
 }
-
-
-int Player::GetPoint(int g_point)
-{
-	return g_point;
-}
-

@@ -138,14 +138,13 @@ void GSPlay::Init()
 	m_listCharacter.push_back(p2);
 
 	// Foods
-	//texture = ResourceManagers::GetInstance()->GetTexture("Items/shadow_0.png");
-	food = std::make_shared<FallingObject>(200, 0);
-	food->SetActive(true);
-	m_listFood.push_back(food);
+	food1 = std::make_shared<FallingObject>(200, 0, 1);
+	food1->SetActive(true);
+	m_listFood.push_back(food1);
 
-	//texture = ResourceManagers::GetInstance()->GetTexture("Items/shadow_1.png");
-	//food = std::make_shared<FallingObject>(400, 1);
-	//m_listFood.push_back(food);
+	food2 = std::make_shared<FallingObject>(200, 0, 2);
+	food2->SetActive(true);
+	m_listFood.push_back(food2);
 
 	m_KeyPress = 0;
 	g_point1 = 0;
@@ -154,20 +153,29 @@ void GSPlay::Init()
 	if (!g_timer.IsStarted()) {
 		g_timer.Start();
 	}
-	g_timer.SetDuration(3000);
-	food_timer.SetDuration(1400);
+	g_timer.SetDuration(700);
+	food_timer.SetDuration(600);
 	food_timer.Start();
+	inTime = false;
 }
 
 void GSPlay::SpawnFood()
 {
-	int index = rand() % 3;
-	int f_speed = food->GetFallingSpeed(index);
-	food = std::make_shared<FallingObject>(f_speed, index);
+	int index1 = rand() % 30;
+	int f_speed = food1->GetFallingSpeed(index1);
+	food1 = std::make_shared<FallingObject>(f_speed, index1, 1);
 
-	food->SetActive(true);
-	m_listFood.push_back(food);
-	food->Spawn(SCREEN_WIDTH - food->GetWidth() - 10, food->GetHeight());
+	food1->SetActive(true);
+	m_listFood.push_back(food1);
+	food1->Spawn(5, (SCREEN_WIDTH - food1->GetWidth()) / 2 - 30, -food1->GetHeight() - 50);
+
+	int index2 = rand() % 30;
+	f_speed = food2->GetFallingSpeed(index2);
+	food2 = std::make_shared<FallingObject>(f_speed, index2, 2);
+
+	food2->SetActive(true);
+	m_listFood.push_back(food2);
+	food2->Spawn((SCREEN_WIDTH + food2->GetWidth()) / 2 + 10, SCREEN_WIDTH - food2->GetWidth(), -food2->GetHeight() - 50);
 }
 
 void GSPlay::Exit()
@@ -218,70 +226,92 @@ void GSPlay::Update(float deltaTime)
 	Vector2 crtPos1 = p1->Get2DPosition();
 	Vector2 crtPos2 = p2->Get2DPosition();
 
-	p_char1 = { (int)crtPos1.x + 70, (int)crtPos1.y + 75, p1->GetWidth() - 110, p1->GetHeight() - 130 };
-	p_char2 = { (int)crtPos2.x + 70, (int)crtPos1.y + 75, p2->GetWidth() - 110, p2->GetHeight() - 130 };
+	p_near1 = { (int)crtPos1.x + 40, (int)crtPos1.y + 5, p1->GetWidth() - 50, p1->GetHeight() - 60 };
+	p_near2 = { (int)crtPos2.x + 40, (int)crtPos2.y + 5, p2->GetWidth() - 50, p2->GetHeight() - 60 };
+
+	p_char1 = { (int)crtPos1.x + 60, (int)crtPos1.y + 80, p1->GetWidth() - 90, p1->GetHeight() - 120 };
+	p_char2 = { (int)crtPos2.x + 60, (int)crtPos1.y + 80, p2->GetWidth() - 90, p2->GetHeight() - 120 };
 
 	Uint32 countTime = g_timer.GetTicks();
 	if (countTime >= g_timer.GetDuration()) 
-	{ 
+	{
 		t_duration.SetDuration(120000);
 	 	inTime = true;
 	 	t_duration.Start();
 		temp = t_duration.GetDuration();
-
 	}
 
-	if (!isPaused && inTime) 
-	{	
-		for (auto it : m_listFood) {
-			it->Update(deltaTime);
-		}
-		for (auto food : m_listFood) {
-			Vector2 crtFoodPosition = food->Get2DPosition();
-			item = { (int)crtFoodPosition.x + 20, (int)crtFoodPosition.y + 30, food->GetWidth() - 20, food->GetHeight() - 35 };
-			if (food->IsActive() && Collision::checkCollision(p_char1, item)) {
-				Stop();
-				g_point1++;
-				food->SetActive(false);
-			}
-			else if (food->IsActive() && Collision::checkCollision(p_char2, item)) {
-				g_point2++;
-				food->SetActive(false);
-			}
-		}
-
-		if (food_timer.GetTicks() >= food_timer.GetDuration()) {
-			SpawnFood();
-			food_timer.Start();
-		}
-
-		std::string str1 = "Score:" + std::to_string(g_point1);
-		m_score1->LoadFromRenderText(str1);
-		std::string str2 = "Score:" + std::to_string(g_point2);
-		m_score2->LoadFromRenderText(str2);
-
-		if (t_duration.GetTicks() >= t_duration.GetDuration())
+	if (!isPaused) 
+	{
+		if (g_timer.GetTicks() >= g_timer.GetDuration())
 		{
-			isPaused = true;
+			inTime = true;
+			//temp = t_duration.GetDuration();
 		}
-		else {
-			printf("%d\n",t_duration.GetTicks());
-			int time = (t_duration.GetDuration() - t_duration.GetTicks()) / 1000;
-			std::string str3 = std::to_string(time);
-			m_time->LoadFromRenderText(str3);
-			m_time->Update(deltaTime);
-			
-		}
-		
-		for (auto it : m_listScore) {
-			it->Update(deltaTime);
-		}
+		if (inTime) {
+			for (auto it : m_listFood) {
+				it->Update(deltaTime);
+			}
+			for (auto food : m_listFood)
+			{
+				Vector2 crtFoodPosition = food->Get2DPosition();
+				item = { (int)crtFoodPosition.x + 20, (int)crtFoodPosition.y + 30, food->GetWidth() - 20, food->GetHeight() - 35 };
 
-		p1->Update(deltaTime);
-		p2->Update(deltaTime);
+				if (Collision::checkCollision(p_near1, item)) p1->ChangeAnimation();
+				if (food->IsActive() && Collision::checkCollision(p_char1, item)) {
+					if (g_point1 + food->GetPoint(food->GetFoodID()) < 0) g_point1 = 0;
+					else {
+						g_point1 += food->GetPoint(food->GetFoodID());
+					}
+					//p1->ChangeAnimation();
+					food->SetActive(false);
+				}
+
+				if (Collision::checkCollision(p_near2, item)) p2->ChangeAnimation();
+				if (food->IsActive() && Collision::checkCollision(p_char2, item)) {
+					if (g_point2 + food->GetPoint(food->GetFoodID()) < 0) g_point2 = 0;
+					else {
+						g_point2 += food->GetPoint(food->GetFoodID());
+					}
+					//p2->ChangeAnimation();
+					food->SetActive(false);
+
+				}
+			}
+
+			if (food_timer.GetTicks() >= food_timer.GetDuration()) {
+				SpawnFood();
+				food_timer.Start();
+			}
+
+			std::string str1 = "Score:" + std::to_string(g_point1);
+			m_score1->LoadFromRenderText(str1);
+			std::string str2 = "Score:" + std::to_string(g_point2);
+			m_score2->LoadFromRenderText(str2);
+
+			if (t_duration.GetTicks() >= t_duration.GetDuration())
+			{
+				isPaused = true;
+			}
+			else {
+				//printf("%d\n",t_duration.GetTicks());
+				/*int time = (t_duration.GetDuration() - t_duration.GetTicks()) / 1000;
+				std::string str3 = std::to_string(time);
+				m_time->LoadFromRenderText(str3);
+				m_time->Update(deltaTime);*/
+			}
+
+			p1->Update(deltaTime);
+			p2->Update(deltaTime);
+
+			for (auto it : m_listScore) {
+				it->Update(deltaTime);
+			}
+		}
 	}
 	else {
-		
+		inTime = false;
+		g_timer.Start();
 	}
 	//Update position of camera
 	//Camera::GetInstance()->Update(deltaTime);
@@ -307,7 +337,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	{
 		it->Draw(renderer);
 	}
-	m_time->Draw(renderer);
+	//m_time->Draw(renderer);
 	if (isPaused)
 	{
 		SDL_Rect rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIDHT };
