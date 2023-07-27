@@ -10,6 +10,7 @@
 #include "GameObject/Player.h"
 #include "GameObject/Timer.h"
 #include "GameObject/Sound.h"
+#include "SDL_mixer.h"
 
 GSPlay::GSPlay() {}
 GSPlay::~GSPlay() {}
@@ -54,9 +55,6 @@ void GSPlay::Init()
 	m_time->Set2DPosition((SCREEN_WIDTH - m_time->GetWidth()) / 2, 30);
 	m_listScore.push_back(m_time);
 
-	m_Sound = std::make_shared<Sound>("Data/Sounds/Roaches_Theme.mp3");
-	m_posSound = std::make_shared<Sound>("Data/Sounds/ding-sound-effect_2.mp3");
-	m_negSound = std::make_shared<Sound>("Data/Sounds/roblox-death-sound-effect.mp3");
 	///Button
 	{
 		// resume button
@@ -98,8 +96,6 @@ void GSPlay::Init()
 		button->SetSize(120, 120); 
 		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 + 64, (SCREEN_HEIDHT - button->GetHeight()) / 2);
 		button->SetOnClick([=]() {
-			m_posSound->isPlay = true;
-			m_negSound->isPlay = true;
 			m_Sound->PlaySound();
 			});
 		m_listButton.push_back(button);
@@ -111,8 +107,6 @@ void GSPlay::Init()
 		button->SetSize(120, 120); 
 		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 + 192, (SCREEN_HEIDHT - button->GetHeight()) / 2);
 		button->SetOnClick([=]() {
-			m_posSound->isPlay = false;
-			m_negSound->isPlay = false;
 			m_Sound->StopSound();
 			});
 		m_listButton.push_back(button);
@@ -169,6 +163,7 @@ void GSPlay::Init()
 	t_duration.Start();
 	inTime = false;
 
+	m_Sound = std::make_shared<Sound>("Data/Sounds/Roaches_Theme.mp3");
 	m_Sound->PlaySound();
 }
 
@@ -275,9 +270,11 @@ void GSPlay::Update(float deltaTime)
 						g_point1 += food->GetPoint(food->GetFoodID());
 					}
 					
-						/*if (food->GetPoint(food->GetFoodID()) > 0) m_posSound->PlaySound();
-						else m_negSound->PlaySound();*/
-					
+					if (food->GetPoint(food->GetFoodID()) > 0) {
+						Mix_PlayChannel(-1, m_posSound, 0);
+					}
+					else Mix_PlayChannel(-1, m_negSound, 0);
+
 					//p1->ChangeAnimation();
 					food->SetActive(false);
 				}
@@ -289,8 +286,10 @@ void GSPlay::Update(float deltaTime)
 						g_point2 += food->GetPoint(food->GetFoodID());
 					}
 					
-						/*if (food->GetPoint(food->GetFoodID()) > 0) m_posSound->PlaySound();
-						else m_negSound->PlaySound();*/
+					if (food->GetPoint(food->GetFoodID()) > 0) {
+						Mix_PlayChannel(-1, m_posSound, 0);
+					}
+					else Mix_PlayChannel(-1, m_negSound, 0);
 					
 					//p2->ChangeAnimation();
 					food->SetActive(false);

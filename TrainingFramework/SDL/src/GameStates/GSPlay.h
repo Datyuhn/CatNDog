@@ -36,7 +36,7 @@ public:
 	SDL_Rect p_near1, p_near2, p_char1, p_char2, item;
 	int		temp;
 
-	std::shared_ptr<Sound>					m_Sound, m_negSound, m_posSound;
+	std::shared_ptr<Sound>					m_Sound;
 
 private:
 	std::shared_ptr<Sprite2D>						m_background, frm, floor, wall;
@@ -58,7 +58,10 @@ private:
 	std::shared_ptr<SpriteAnimation>				obj;
 	
 	Timer g_timer, t_duration, food_timer;
-	
+
+	Mix_Chunk* m_posSound = Mix_LoadWAV("Data/Sounds/ding-sound-effect_2.mp3");
+	Mix_Chunk* m_negSound = Mix_LoadWAV("Data/Sounds/roblox-death-sound-effect.mp3");
+
 	SDL_Color m_scoreColor = {255, 255, 255, 255};
 	std::vector<SDL_Scancode> p_controlKey;
 

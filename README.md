@@ -3,11 +3,14 @@ Thành viên:
 - Nguyễn Huy Đạt
 - Lê Hà Trang
 
+Slide:
+https://docs.google.com/presentation/d/1rcsLwf3OZW-MCkxbH9ePZf0Y823ZDAyn6iuAKlvyQ4o/edit?fbclid=IwAR2mHB8YujGFZbjfVb3kxeGVpQTok5q21Lmo56epAmMNaYYLS6KSxyeL__U&pli=1#slide=id.p1
+
 Mô tả:
-Game lấy ý tưởng về cuộc chiến giữa chó và mèo. Mục tiêu là thu thập các vật phẩm bao gồm cả vật phẩm để tích điểm. Các vật phẩm bao gồm vật phẩm tốt như đồ ăn và cả các vật phẩm có hại. Game gồm 2 người chơi, mỗi người chơi sẽ điều khiển 1 trong 2 nhân vật trên. Sau một khoảng thời gian, người có số điểm cao hơn sẽ giành chiến thắng.
+Game có mục tiêu là thu thập các vật phẩm bao gồm cả vật phẩm để tích điểm. Các vật phẩm bao gồm vật phẩm tốt như đồ ăn và cả các vật phẩm có hại. Game gồm 2 người chơi, mỗi người chơi sẽ điều khiển 1 trong 2 nhân vật trên. Sau một khoảng thời gian, người có số điểm cao hơn sẽ giành chiến thắng.
 
 Lối chơi:
-2 nhân vật chó và mèo sẽ xuất hiện ở 2 bên màn hình.  Để thu thập được vật phẩm, người chơi phải di chuyển nhân vật của mình qua trái và phải trên màn hình, sao cho có thể hứng được cách vật phẩm tốt và né tránh những vật phẩm có hại.
+2 nhân vật sẽ xuất hiện ở 2 bên màn hình.  Để thu thập được vật phẩm, người chơi phải di chuyển nhân vật của mình qua trái và phải trên màn hình, sao cho có thể hứng được cách vật phẩm tốt và né tránh những vật phẩm có hại.
 
 Cơ chế:
 Trò chơi diễn ra trong 1 khoảng thời gian nhất định. Khi nhân vật nhặt được vật phẩm tốt người chơi sẽ được cộng điểm, ngược lại nếu nhặt phải vật phẩm có hại sẽ bị trừ điểm. Sau khi hết thời gian người có điểm cao hơn sẽ giành chiến thắng
