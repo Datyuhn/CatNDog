@@ -12,7 +12,7 @@ GSOption::~GSOption()
 void GSOption::Init()
 {
 	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("startbg.jpg");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("Untitled.png");
 
 	// background
 	//auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");

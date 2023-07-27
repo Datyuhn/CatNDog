@@ -4,6 +4,7 @@
 #include "SDL_scancode.h"
 #include <vector>
 #include <string>
+#include "Sound.h"
 
 class Collision;
 class Sprite2D;

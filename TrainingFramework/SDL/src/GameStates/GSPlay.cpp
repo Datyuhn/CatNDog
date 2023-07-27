@@ -9,6 +9,7 @@
 #include "GameObject/Collision.h"
 #include "GameObject/Player.h"
 #include "GameObject/Timer.h"
+#include "GameObject/Sound.h"
 
 GSPlay::GSPlay() {}
 GSPlay::~GSPlay() {}
@@ -53,6 +54,9 @@ void GSPlay::Init()
 	m_time->Set2DPosition((SCREEN_WIDTH - m_time->GetWidth()) / 2, 30);
 	m_listScore.push_back(m_time);
 
+	m_Sound = std::make_shared<Sound>("Data/Sounds/Roaches_Theme.mp3");
+	m_posSound = std::make_shared<Sound>("Data/Sounds/ding-sound-effect_2.mp3");
+	m_negSound = std::make_shared<Sound>("Data/Sounds/roblox-death-sound-effect.mp3");
 	///Button
 	{
 		// resume button
@@ -93,8 +97,10 @@ void GSPlay::Init()
 
 		button->SetSize(120, 120); 
 		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 + 64, (SCREEN_HEIDHT - button->GetHeight()) / 2);
-		button->SetOnClick([]() {
-			//Turn on sound
+		button->SetOnClick([=]() {
+			m_posSound->isPlay = true;
+			m_negSound->isPlay = true;
+			m_Sound->PlaySound();
 			});
 		m_listButton.push_back(button);
 
@@ -104,8 +110,10 @@ void GSPlay::Init()
 
 		button->SetSize(120, 120); 
 		button->Set2DPosition((SCREEN_WIDTH - button->GetWidth()) / 2 + 192, (SCREEN_HEIDHT - button->GetHeight()) / 2);
-		button->SetOnClick([]() {
-			//Turn off sound
+		button->SetOnClick([=]() {
+			m_posSound->isPlay = false;
+			m_negSound->isPlay = false;
+			m_Sound->StopSound();
 			});
 		m_listButton.push_back(button);
 
@@ -155,11 +163,13 @@ void GSPlay::Init()
 	}
 	g_timer.SetDuration(800);
 	food_timer.SetDuration(600);
-	t_duration.SetDuration(90700);
+	t_duration.SetDuration(91700);
 
 	food_timer.Start();
 	t_duration.Start();
 	inTime = false;
+
+	m_Sound->PlaySound();
 }
 
 void GSPlay::SpawnFood()
@@ -188,12 +198,13 @@ void GSPlay::Exit()
 
 void GSPlay::Pause()
 {
+	m_Sound->StopSound();
 
 }
 
 void GSPlay::Resume()
 {
-
+	m_Sound->PlaySound();
 }
 
 void GSPlay::HandleEvents()
@@ -236,13 +247,10 @@ void GSPlay::Update(float deltaTime)
 	p_char2 = { (int)crtPos2.x + 50, (int)crtPos1.y + 80, p2->GetWidth() - 70, p2->GetHeight() - 120 };
 
 	Uint32 countdown = g_timer.GetTicks();
-	if (countdown >= g_timer.GetDuration())
+	/*if (countdown >= g_timer.GetDuration())
 	{
-	 	//inTime = true;
 		Stop();
-	 	//t_duration.Start();
-		//temp = t_duration.GetDuration();
-	}
+	}*/
 
 	if (!isPaused)
 	{
@@ -266,6 +274,10 @@ void GSPlay::Update(float deltaTime)
 					else {
 						g_point1 += food->GetPoint(food->GetFoodID());
 					}
+					
+						/*if (food->GetPoint(food->GetFoodID()) > 0) m_posSound->PlaySound();
+						else m_negSound->PlaySound();*/
+					
 					//p1->ChangeAnimation();
 					food->SetActive(false);
 				}
@@ -276,6 +288,10 @@ void GSPlay::Update(float deltaTime)
 					else {
 						g_point2 += food->GetPoint(food->GetFoodID());
 					}
+					
+						/*if (food->GetPoint(food->GetFoodID()) > 0) m_posSound->PlaySound();
+						else m_negSound->PlaySound();*/
+					
 					//p2->ChangeAnimation();
 					food->SetActive(false);
 				}

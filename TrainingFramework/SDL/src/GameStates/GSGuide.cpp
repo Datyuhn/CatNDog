@@ -12,7 +12,7 @@ GSGuide::~GSGuide()
 void GSGuide::Init()
 {
 	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("startbg.jpg");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("Untitled.png");
 
 	// background
 	//auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
@@ -37,7 +37,7 @@ void GSGuide::Init()
 		});
 	m_listButton.push_back(btnClose);
 
-	m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	m_Sound = std::make_shared<Sound>("Data/Sounds/guide.mp3");
 	m_Sound->PlaySound();
 }
 

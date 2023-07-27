@@ -12,7 +12,7 @@ GSMenu::~GSMenu()
 void GSMenu::Init()
 {
 	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("startbg.jpg");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("Untitled.png");
 
 	// background
 	//auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
@@ -49,7 +49,7 @@ void GSMenu::Init()
 	btnOption->SetSize(317, 90);
 	btnOption->Set2DPosition((SCREEN_WIDTH - btnPlay->GetWidth()) / 2, (SCREEN_HEIDHT - btnPlay->GetHeight()) / 2 + 160);
 	btnOption->SetOnClick([]() {
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_OPTION);
+		//GameStateMachine::GetInstance()->ChangeState(StateType::STATE_OPTION);
 		});
 	m_listButton.push_back(btnOption);
 
@@ -78,13 +78,13 @@ void GSMenu::Init()
 
 	// Game title
 	// Set Font
-	m_textColor = { 0, 0, 0 };
+	m_textColor = { 189,119,86 };
 	m_textGameName = std::make_shared<Text>("Data/BADABB__.ttf", m_textColor);
-	m_textGameName->SetSize(400, 65);
+	m_textGameName->SetSize(350, 85);
 	m_textGameName->Set2DPosition((SCREEN_WIDTH - m_textGameName->GetWidth())/2, SCREEN_HEIDHT / 2 - 260);
-	m_textGameName->LoadFromRenderText("Game");
+	m_textGameName->LoadFromRenderText("Feed me");
 
-	m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	m_Sound = std::make_shared<Sound>("Data/Sounds/Intro_OGGY.mp3");
 	m_Sound->PlaySound();
 }
 

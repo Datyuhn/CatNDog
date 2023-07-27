@@ -3,7 +3,7 @@ Text::Text(std::string fontPath, SDL_Color textColor)
 	: m_TextColor(textColor)
 {
 	//Initialize font
-	m_Font = TTF_OpenFont(fontPath.c_str(), 200);
+	m_Font = TTF_OpenFont(fontPath.c_str(), 300);
 
 	if (m_Font == NULL)
 	{
